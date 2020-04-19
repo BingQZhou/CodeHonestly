@@ -149,3 +149,81 @@ def ast_to_dict(node):
             fields[k] = None
 
     return { node.__class__.__name__: fields }
+
+def process_import_statements(graph):
+    # bfs through graph
+    queue = graph['Module']['body'][:]
+    imports = {}
+    while len(queue):
+        polled = queue.pop(0)
+
+        if 'Import' in polled.keys():
+            for name in polled['Import']['names']:
+                imports[name['alias']['asname']] = name['alias']['name']
+
+        queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
+        for key in polled.keys():
+            if isinstance(polled[key], list):
+                queue.extend(polled[key])
+
+    queue = graph['Module']['body'][:]
+    while len(queue):
+        polled = queue.pop(0)
+
+        for key in polled.keys():
+            if isinstance(polled[key], str) and polled[key] in imports.keys():
+                polled[key] = imports[polled[key]]
+
+        queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
+        for key in polled.keys():
+            if isinstance(polled[key], list):
+                queue.extend(polled[key])
+
+    return imports, graph
+
+def process_functions(graph):
+    queue = graph['Module']['body'][:]
+    functions = {}
+
+    while len(queue):
+        polled = queue.pop(0)
+
+        if 'FunctionDef' in polled.keys():
+            functions[polled['FunctionDef']['name']] = {
+                'args': [x['arg']['arg'] for x in polled['FunctionDef']['args']['arguments']['args']],
+                # 'statements': polled['FunctionDef']['body'],
+                'function_calls': set()
+            }
+
+            inner_queue = polled['FunctionDef']['body'][:]
+
+            while len(inner_queue):
+                inner_polled = inner_queue.pop(0)
+
+                if 'Call' in inner_polled.keys():
+                    if 'Name' in inner_polled['Call']['func']:
+                        functions[polled['FunctionDef']['name']]['function_calls'].add((inner_polled['Call']['func']['Name']['id'],))
+                    elif 'Attribute' in inner_polled['Call']['func']:
+                        full_call = [inner_polled['Call']['func']['Attribute']['attr']]
+                        current_node = inner_polled['Call']['func']['Attribute']['value']
+
+                        while 'Attribute' in current_node:
+                            full_call = [current_node['Attribute']['attr']] + full_call
+                            current_node = current_node['Attribute']['value']
+
+                        if 'Name' in current_node:
+                            full_call = [current_node['Name']['id']] + full_call
+
+                        functions[polled['FunctionDef']['name']]['function_calls'].add(tuple(full_call))
+
+                inner_queue.extend([inner_polled[key] for key in inner_polled.keys() if isinstance(inner_polled[key], dict)])
+                for key in inner_polled.keys():
+                    if isinstance(inner_polled[key], list):
+                        inner_queue.extend(inner_polled[key])
+
+        queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
+        for key in polled.keys():
+            if isinstance(polled[key], list):
+                queue.extend(polled[key])
+
+    return functions
