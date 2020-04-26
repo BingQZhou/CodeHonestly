@@ -2,6 +2,6 @@
 */.ipynb_checkpoints/*
 __pycache__/
 *.py[cod]
-data/
+data/*
 *.ipynb
-!data/test
+!data/test/*
