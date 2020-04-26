@@ -1,3 +1,6 @@
 # CodeHonestly
-Senior Project for DSC180  
+## Utilize AST graphs to detect code pligiarism
+
 ![](logo.png)
+
+`python run.py test` to run the test data
