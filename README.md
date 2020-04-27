@@ -1,5 +1,5 @@
 # CodeHonestly
-### Utilize AST graphs to detect code pligiarism
+### Utilize AST graphs to detect code plagiarism
 
 ![](logo.png)
 
