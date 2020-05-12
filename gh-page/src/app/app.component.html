@@ -1,0 +1,28 @@
+<mat-horizontal-stepper (selectionChange)="selectionChange($event)">
+  <mat-step>
+    <ng-template matStepLabel>Code</ng-template>
+    <mat-form-field style='min-width: 500px;font-family: "Courier New"'>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code" #codeView (keydown)="processTab($event)"></textarea>
+    </mat-form-field>
+    <div>
+      <button matStepperNext mat-raised-button>Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Options</ng-template>
+    <button mat-raised-button matStepperNext (click)="sendCode()">Visualize</button>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Visualization</ng-template>
+    <div>
+      <ul>
+        <li *ngFor='let element of imports | keyvalue'>{{element.key}} > {{element.value}}</li>
+      </ul>
+    </div>
+    <div id='container'></div>
+  </mat-step>
+</mat-horizontal-stepper>
+
+<script type='text/javascript'>
+  vt = vtree(document.getElementById('container'))
+</script>
