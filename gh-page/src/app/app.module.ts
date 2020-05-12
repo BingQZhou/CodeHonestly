@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatGridListModule,
     MatButtonModule,
     FormsModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
