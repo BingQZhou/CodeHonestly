@@ -29,7 +29,8 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.sass"
+              "src/styles.sass",
+              "src/assets/vtree.css"
             ],
             "scripts": [
               "src/assets/vtree.min.js"
@@ -126,6 +127,10 @@
               "devServerTarget": "gh-page:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }
