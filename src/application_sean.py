@@ -22,7 +22,7 @@ def process():
         remove_unnecessary(cpy)
     # remove_insignificant_variable(cpy)
     if request.form.get('normalize') == 'true':
-        unchain_call_parent(cpy)
+        unchain(cpy, cpy['body'])
     remove_excessive_call(cpy)
     return json.dumps({
         'imports': imports,
@@ -41,40 +41,35 @@ def remove_unnecessary(cpy):
         for key in polled.keys():
             if isinstance(polled[key], list):
                 queue.extend(polled[key])
-def unchain_call_parent(cpy, flag=False):
-    calls = unchain_call(cpy, flag=flag)
-    cpy['body'] = calls
+# a = default tree
+# a['body'] = uchain_body_calls['body']
+def unchain_body_calls(body):
+    cpy = list(body)
+    to_delete = []
+    for i, ele in enumerate(body):
+        did_unchain = unchain(ele, cpy)
+        if did_unchain:
+            to_delete.append(i)
+    for x in to_delete[::-1]:
+        cpy.pop(x)
     return cpy
+def unchain(node, body):
+    if should_unchain(node):
+        unchain_helper(node, body)
+        return True
+    for key, item in node.items():
+        if isinstance(item, list) and key == 'body':
+            node['body'] = unchain_body_calls(item)
+    return False
 
-def unchain_call(cpy, prev=None, flag=False):
-    calls = []
-    if isinstance(cpy, dict) and cpy['_PyType'] in ['If'] and not flag:
-        cpy = unchain_call_parent(cpy, True)
-        return [cpy]
-    for key, item in cpy.items():
-        if isinstance(item, list):
-            for ele in item:
-                if should_unchain(ele) or cpy['_PyType'] == 'Assign':
-                    calls.extend(unchain_call(ele, prev=cpy['_PyType']))
-                else:
-                    calls.append(ele)
-        elif isinstance(item, dict):
-            if should_unchain(item) or cpy['_PyType'] == 'Assign':
-                if item['_PyType'] == 'Call' and (cpy['_PyType'] in ['Call', 'Expr'] or (cpy['_PyType'] == 'Attribute' and prev == 'Call')):
-                    calls.extend(unchain_helper(item))
-                else:
-                    calls.extend(unchain_call(item, prev=cpy['_PyType']))
-            else:
-                calls.append(item)
-    return calls
 def should_unchain(node):
     if not isinstance(node, dict):
         return False
     if node['_PyType'] == 'Call':
         return True
     else:
-        return any([should_unchain(item) for key, item in node.items() if isinstance(item, dict)] + [any((should_unchain(ele) for ele in item)) for key, item in node.items() if isinstance(item, list)])
-def unchain_helper(node):
+        return any([should_unchain(item) for key, item in node.items() if isinstance(item, dict)])
+def unchain_helper(node, body):
     stack = [node]
     call_stack = []
 
@@ -88,7 +83,26 @@ def unchain_helper(node):
             for key, item in popped.items():
                 if isinstance(item, list):
                     stack.extend(item)
-    return call_stack[::-1]
+    for i in range(0, len(call_stack) - 1):
+        call_stack[i] = remove_subtree(call_stack[i])
+    body.extend(call_stack[::-1])
+def remove_subtree(tree, flag=False):
+    if not isinstance(tree, dict):
+        return tree
+    output = {}
+
+    for key, item in tree.items():
+        if tree['_PyType'] == 'Call':
+            if not flag:
+                output[key] = remove_subtree(item, True)
+        else:
+            output[key] = remove_subtree(item, flag)
+            if len(output[key]) == 0 and key == 'value':
+                output[key] = {
+                    'id': None,
+                    'type': 'udv'
+                }
+    return output
 def preprocess_import_and_call_statements(graph):
     built_ins = frozenset(['abs', 'all', 'any', 'ascii', 'bin', 'bool', 'breakpoint', 'bytearray', 'bytes', 'callable', 'chr', 'classmethod', 'compile', 'complex', 'delattr', 'dict', 'dir', 'divmod', 'enumerate', 'eval', 'exec', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'help', 'hex', 'id', 'input', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord', 'pow', 'print', 'property', 'range', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', '__import__'])
     udfs = set()
@@ -98,7 +112,7 @@ def preprocess_import_and_call_statements(graph):
     while len(queue):
         polled = queue.pop(0)
 
-        if polled['_PyType'] == 'Import':
+        if polled['_PyType'] in ['Import', 'ImportFrom']:
             for name in polled['names']:
                 if name['asname'] is not None:
                     imports[name['asname']] = name['name']
@@ -154,20 +168,28 @@ def remove_insignificant_variable(cpy):
                 queue.extend(polled[key])
 
 def remove_excessive_call(cpy):
+    print('good')
     #Todo
     pass
 def ast2json( node ):
 
     if not isinstance( node, AST ):
         raise TypeError( 'expected AST, got %r' % node.__class__.__name__ )
+
+
     def _format( node ):
         if isinstance( node, AST ):
             fields = [ ( '_PyType', _format( node.__class__.__name__ ) ) ]
             fields += [ ( a, _format( b ) ) for a, b in iter_fields( node ) ]
+
             return '{ %s }' % ', '.join( ( '"%s": %s' % field for field in fields ) )
+
         if isinstance( node, list ):
             return '[ %s ]' % ', '.join( [ _format( x ) for x in node ] )
+
         return json.dumps( node )
+
+
     return _format( node )
 
 
@@ -179,25 +201,6 @@ def iter_fields( node ):
             yield field, getattr( node, field )
         except AttributeError:
             pass
-
-# This is a simplified preprocessing function used to demonstrate validity in local
-def run_local(path):
-    f = open(path,'r')
-    node = ast.parse(f.read())
-    jsoned = ast2json(node)
-    as_obj = json.loads(jsoned)
-    # manipulation
-    cpy = dict(as_obj)
-    imports, cpy = preprocess_import_and_call_statements(cpy)
-    # remove_insignificant_variable(cpy)
-    remove_excessive_call(cpy)
-    parsed_json = json.dumps({
-        'imports': imports,
-        'graph': cpy
-    })
-    with open('../ast_in_json.json', 'w') as f:
-        json.dump(parsed_json,f, indent=2, sort_keys=True)
-    return
 
 if __name__ == '__main__':
     application.run(debug=True, host='0.0.0.0')
