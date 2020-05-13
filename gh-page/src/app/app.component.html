@@ -1,17 +1,23 @@
-<mat-card>
-  <pre>
-Website outline:
-Get Started
-We will allow users to input several files, or a zip folder, and then we will output a similarity report
-How It Works 
-It visualizes the intermediate result, which is AST graph.
-And we are deciding whether to share the secret, the detail of the algorithm of calculating similarity score.
-Team Overview
-Introduction of the team members
-Github Link
-We will include a link to our GitHub repository
-  </pre>
-</mat-card>
+<div class='placeholder'>
+  <mat-card class='placeholder-card'>
+    <mat-card-title>
+      Website Outline
+    </mat-card-title>
+    <mat-card-content>
+      <h3>Get Started</h3>
+      <div>
+        We will allow users to input several files, or a zip folder, and then we will output a similarity report
+      </div>
+      <h3>How It Works</h3>
+      <div>
+        It visualizes the intermediate result, which is AST graph. We are deciding whether to share the secret, the detail of the algorithm of calculating similarity score.
+      </div>
+      <h3>Team Overview</h3>
+      <h3>Introduction of team members</h3>
+      <h3>GitHub Link</h3>
+    </mat-card-content>
+  </mat-card>
+</div>
 <mat-horizontal-stepper (selectionChange)="selectionChange($event)">
   <mat-step>
     <ng-template matStepLabel>Code</ng-template>
