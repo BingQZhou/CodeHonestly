@@ -51,7 +51,7 @@ sum(1, 2, 3)`
     this.vt = vtree(document.getElementById('container')).conf('maxNameLen', 32).conf('maxValueLen', 32)
     this.vt.mode(this.vt.MODE_PYTHON_AST).conf('showArrayNode', false)
     document.querySelector('svg').setAttribute('width', <string><unknown>(window.innerWidth * .9))
-    let request = await fetch('http://demo.codehonestly.com/ast2json', {
+    let request = await fetch('http://54.212.108.239:5000/ast2json', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
