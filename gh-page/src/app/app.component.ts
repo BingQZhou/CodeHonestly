@@ -10,8 +10,8 @@ declare var vtree: any
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('codeView', {static: false}) codeView: ElementRef;
-  @ViewChild('fileInput', {static: false}) fileView: ElementRef;
+  @ViewChild('codeView') codeView: ElementRef;
+  @ViewChild('fileInput') fileView: ElementRef;
 
   code: string = `# demonstration of preprocessing and normalizing imports
 import pandas as pd
@@ -39,6 +39,12 @@ sum(1, 2, 3)`
       this.codeView.nativeElement.selectionStart = this.codeView.nativeElement.selectionEnd = start + 1
       return false
     }
+  }
+
+  processFile(e) {
+    let fr = new FileReader()
+    fr.onload = () => this.codeView.nativeElement.value = fr.result
+    fr.readAsText(e.target.files[0])
   }
 
   async sendCode() {
