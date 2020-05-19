@@ -23,6 +23,8 @@
     "@angular/router": "~8.2.11",
     "angular-cli-ghpages": "^0.6.2",
     "hammerjs": "^2.0.8",
+    "n": "^6.5.1",
+    "ngx-material-file-input": "^2.1.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

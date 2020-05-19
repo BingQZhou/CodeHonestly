@@ -11,6 +11,7 @@ declare var vtree: any
 })
 export class AppComponent implements OnInit {
   @ViewChild('codeView', {static: false}) codeView: ElementRef;
+  @ViewChild('fileInput', {static: false}) fileView: ElementRef;
 
   code: string = `# demonstration of preprocessing and normalizing imports
 import pandas as pd
@@ -44,7 +45,7 @@ sum(1, 2, 3)`
     this.vt = vtree(document.getElementById('container')).conf('maxNameLen', 32).conf('maxValueLen', 32)
     this.vt.mode(this.vt.MODE_PYTHON_AST).conf('showArrayNode', false)
     document.querySelector('svg').setAttribute('width', <string><unknown>(window.innerWidth * .9))
-    let request = await fetch('http://54.149.60.119:5000/ast2json', {
+    let request = await fetch('http://demo.codehonestly.com/ast2json', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
