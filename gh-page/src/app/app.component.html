@@ -7,7 +7,7 @@
     <div>
       <mat-form-field class='padded'>
         <mat-label>Upload file to use</mat-label>
-        <ngx-mat-file-input #fileInput (change)='processFile($event)'></ngx-mat-file-input>
+        <ngx-mat-file-input (change)='processFile($event)'></ngx-mat-file-input>
       </mat-form-field>
       <button matStepperNext mat-raised-button>Next</button>
     </div>

@@ -11,7 +11,6 @@ declare var vtree: any
 })
 export class AppComponent implements OnInit {
   @ViewChild('codeView') codeView: ElementRef;
-  @ViewChild('fileInput') fileView: ElementRef;
 
   code: string = `# demonstration of preprocessing and normalizing imports
 import pandas as pd
@@ -32,7 +31,7 @@ sum(1, 2, 3)`
   ngOnInit(): void {
   }
 
-  processTab(e: KeyboardEvent) {
+  processTab(e: KeyboardEvent): boolean {
     if (e.key === 'Tab') {
       let start = this.codeView.nativeElement.selectionStart, end = this.codeView.nativeElement.selectionEnd
       this.code = this.code.substring(0, start) + '\t' + this.code.substring(end)
@@ -41,13 +40,16 @@ sum(1, 2, 3)`
     }
   }
 
-  processFile(e) {
+  processFile(e: any): void {
     let fr = new FileReader()
-    fr.onload = () => this.codeView.nativeElement.value = fr.result
+    fr.onload = () => {
+      this.codeView.nativeElement.value = fr.result
+      this.code = fr.result as string
+    }
     fr.readAsText(e.target.files[0])
   }
 
-  async sendCode() {
+  async sendCode(): Promise<void> {
     this.vt = vtree(document.getElementById('container')).conf('maxNameLen', 32).conf('maxValueLen', 32)
     this.vt.mode(this.vt.MODE_PYTHON_AST).conf('showArrayNode', false)
     document.querySelector('svg').setAttribute('width', <string><unknown>(window.innerWidth * .9))
@@ -67,7 +69,7 @@ sum(1, 2, 3)`
     }
   }
 
-  selectionChange(e: StepperSelectionEvent) {
+  selectionChange(e: StepperSelectionEvent): void {
     if (e.selectedIndex === 2) {
       this.sendCode()
     }
