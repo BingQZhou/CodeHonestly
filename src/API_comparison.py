@@ -44,7 +44,7 @@ def get_smaller(ls):
 def get_info(sub):
     s = "%d:%s" % (len(sub.children), sub.label)
     s = '\n'.join([s]+[str(c) for c in sub.children])
-    API = re.search('func Attribute (\w+)', s).group(1).lower()
+    API = re.search('func (.+)', s).group(1).split(' ')[-1].lower()
     N = len(s.split('\n'))
     return N, API, sub
 
@@ -61,23 +61,21 @@ def get_node_type(node):
     return ntype
 
 def get_sim_matrix(data_1, data_2):
-    
-    methods = data_1.keys()
-    
+    methods_1 = data_1.keys()
+    methods_2 = data_2.keys()
     ls = []
     temp = {}
     new = {}
-    for i in methods:
+    for i in methods_1:
         info_1 = data_1[i]
         temp[i] = []
         new[i] = {}
-        for n in methods:
+        for n in methods_2:
             info_2 = data_2[n]
             N1 = len(info_1[0])
             N2 = len(info_2[0])
             matrix = np.full((N1, N2), np.nan)
             new[i][n] = []
-            #print('....................', i, '+', n, '......')
             for k in range(N1):
                 API_1 = info_1[1][k]
                 max_sim = -1
