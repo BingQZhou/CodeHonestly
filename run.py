@@ -80,7 +80,10 @@ def main(targets):
             else:
                 break
         if 'save' in output_type:
-            os.mkdir(output_dir) 
+            try:
+              os.mkdir(output_dir) 
+            except:
+              pass
             f = open(join(output_dir, output_file), "w")
             for i in top_k:
                 for j in i:
