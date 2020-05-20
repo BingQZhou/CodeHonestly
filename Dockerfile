@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ucsdets/scipy-ml-notebook
 
 RUN apt update
 RUN apt install -y git python3.7 python3-pip
