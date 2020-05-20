@@ -75,6 +75,7 @@ def main(targets):
             for j in i:
                 f.write(str(j) + '\n')
         f.close()
+	print("Result saved to folder Result")
 
 
 if __name__ == '__main__':
