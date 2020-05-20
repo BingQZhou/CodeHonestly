@@ -134,7 +134,7 @@ def find_peak(mat):
     return max_, x, y
 
 
-def run_files (file1, file2):
+def run_files (file1, file2, type_):
     with open(file1) as f_1:
         full_lines_1 = ''
         for i in f_1.readlines():
@@ -198,11 +198,12 @@ def run_files (file1, file2):
     #print(final_pair)
     str_ = 'Similiarity result: ' + '\n '
     #print('Similiarity result: ')
-    for i in final_pair:
-        str_ = str_ + 'Mythod: ' + str(list(data_1.keys())[i[1][0]]) +  ' ------ ' + \
-              str(list(data_2.keys())[i[1][1]]) + ' with similiarity: ' + str(i[0]) + '\n '
-        #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ', 
-         #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
+    if type_ == 'complex':
+        for i in final_pair:
+            str_ = str_ + 'Mythod: ' + str(list(data_1.keys())[i[1][0]]) +  ' ------ ' + \
+                  str(list(data_2.keys())[i[1][1]]) + ' with similiarity: ' + str(i[0]) + '\n '
+            #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ', 
+             #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
     all_nodes = 0
     for i in range (len(final_pair)):
