@@ -15,13 +15,15 @@ from model import run
 
 TEST_DATA_PARAMS = 'config/test-data-params.json'
 TRAIN_DATA_PARAMS = 'config/data-params.json'
-TEST_PROJECT_PARAMS = 'config/test-project-params.json'
+TEST_PROJECT_PARAMS = "config/test-project-params.json"
+
 
 
 def load_params(fp):
     with open(fp) as fh:
         param = json.load(fh)
     return param
+
 
 
 def Sort(sub_li): 
@@ -37,13 +39,20 @@ def main(targets):
         # Run and then generate a fake similarity comparison according to function call(pycode_similar)
         #cfg = load_params(TEST_PROJECT_PARAMS)
         #run(**cfg)
+        cfg = load_params(TEST_PROJECT_PARAMS)
+        output_file = cfg['output_file']
+        data_dir = cfg['data_dir']
+        output_dir = cfg['output_dir'] 
+        thre = cfg['threshold']
+        output_type = cfg['output_type'] # save or print out or [save and print out]
+        output_mode = cfg['output_mode'] # simple or complex
 
 
 
-        onlyfiles = [f for f in listdir('./data') if isfile(join('./data', f))]
+        onlyfiles = [f for f in listdir(data_dir) if isfile(join(data_dir, f))]
         all_py = [f for f in onlyfiles if f[-3:] == '.py']
         #print(all_py)
-        thre = 0.3
+        #thre = 0.3
         fit_result = []
         max_ = 0
         max_info = ''
@@ -56,7 +65,7 @@ def main(targets):
             #print(list_)
             f1 = list_[i][0]
             f2 = list_[i][1]
-            score_ , str_ = run_files(join('./data',f1), join('./data',f2))
+            score_ , str_ = run_files(join(data_dir,f1), join(data_dir,f2), output_mode)
             fit_result = fit_result + [[list_[i][0], list_[i][1], score_, str_]]
 
         string_ = Sort(fit_result)
@@ -68,8 +77,26 @@ def main(targets):
                 top_k = top_k + [string_[i]]
             else:
                 break
-
-        os.mkdir('./result') 
+        if 'save' in output_type:
+            try:
+              os.mkdir(output_dir)
+            except:
+              pass 
+            f = open(join(output_dir, output_file), "w")
+            for i in top_k:
+                for j in i:
+                    f.write(str(j) + '\n')
+            f.close()
+            print("Result saved to folder: Result")
+        if 'print' in output_type:
+            for i in top_k:
+                for j in i:
+                    print(j)
+        
+        try:
+          os.mkdir('./result')
+        except:
+          pass
         f = open("./result/output.txt", "w")
         for i in top_k:
             for j in i:
