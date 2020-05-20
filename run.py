@@ -58,7 +58,9 @@ def main(targets):
         max_info = ''
         file_1 = ''
         file_2 = ''
+        
 
+        
         comb = combinations(all_py, 2) 
         list_ = list(comb)
         for i in range(len(list_)):
@@ -78,10 +80,7 @@ def main(targets):
             else:
                 break
         if 'save' in output_type:
-            try:
-              os.mkdir(output_dir)
-            except:
-              pass 
+            os.mkdir(output_dir) 
             f = open(join(output_dir, output_file), "w")
             for i in top_k:
                 for j in i:
@@ -93,16 +92,7 @@ def main(targets):
                 for j in i:
                     print(j)
         
-        try:
-          os.mkdir('./result')
-        except:
-          pass
-        f = open("./result/output.txt", "w")
-        for i in top_k:
-            for j in i:
-                f.write(str(j) + '\n')
-        f.close()
-        print("Result saved to folder Result")
+
 
 
 if __name__ == '__main__':
