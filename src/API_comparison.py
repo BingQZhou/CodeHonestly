@@ -1,8 +1,5 @@
 from pre_process import *
 
-
-
-
 def insert_cost(a):
     return 1
 def remove_cost(a):
@@ -34,13 +31,13 @@ def get_smaller(ls):
                 length.append(N)
                 APIs.append(API)
                 subs.append(sub)
-                
+
             except:
                 continue
         result = [length, APIs, subs]
         data[l] = result
     return data
-        
+
 def get_info(sub):
     s = "%d:%s" % (len(sub.children), sub.label)
     s = '\n'.join([s]+[str(c) for c in sub.children])
@@ -97,9 +94,9 @@ def get_sim_matrix(data_1, data_2):
                 else:
                     detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
                 new[i][n].append(detail)
-                        
+
             temp[i].append(matrix)
-        
+
     return temp, new
 
 def get_score(matrix):
@@ -108,11 +105,11 @@ def get_score(matrix):
     mth_1_len = len(matrix)
     mth_2_len = len(matrix[0])
     sum_ = 0
-    
+
     for i in matrix:
         temp_ = [j for j in i if j > 0]
         if len(temp_) != 0:
-            
+
             temp_ = max(temp_)
             sum_ = sum_ + temp_
         else:
@@ -132,17 +129,13 @@ def find_peak(mat):
     return max_, x, y
 
 
-def run_files (file1, file2, type_):
+def run_files(file1, file2, type_):
     with open(file1) as f_1:
-        full_lines_1 = ''
-        for i in f_1.readlines():
-            full_lines_1+=i
+        full_lines_1 = f_1.read()
     # for ur own reference
-    
+
     with open(file2) as f_2:
-        full_lines_2 = ''
-        for i in f_2.readlines():
-            full_lines_2+=i
+        full_lines_2 = f_2.read()
     data_1 = json.loads(process(full_lines_1))
     data_2 = json.loads(process(full_lines_2))
 
@@ -159,13 +152,13 @@ def run_files (file1, file2, type_):
     #print(data_1)
 
     temp, new = get_sim_matrix(data_1, data_2)
-    
+
     methods_1 = data_1.keys()
     methods_2 = data_2.keys()
-    
+
     if min(len(methods_1), len(methods_2)) == len(methods_1):
         matrix = np.full((len(methods_1), len(methods_2)), np.nan)
-    else: 
+    else:
         matrix = np.full((len(methods_2), len(methods_1)), np.nan)
 
 
@@ -200,7 +193,7 @@ def run_files (file1, file2, type_):
         for i in final_pair:
             str_ = str_ + 'Method: ' + str(list(data_1.keys())[i[1][0]]) +  ' ------ ' + \
                   str(list(data_2.keys())[i[1][1]]) + ' with similarity: ' + str(i[0]) + '\n '
-            #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ', 
+            #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ',
              #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
     all_nodes = 0

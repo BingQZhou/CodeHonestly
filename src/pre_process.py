@@ -1,20 +1,10 @@
 from __future__ import print_function
 from _ast import AST
-import ast
-import json
-import pprint
-import sys
-import re
+import ast, json, pprint, sys, re, numpy as np, zss, os
 from zss import simple_distance, Node
-import numpy as np
-import zss
-import os 
 from os import listdir
 from os.path import isfile, join
-from itertools import combinations 
-
-
-
+from itertools import combinations
 
 def process(code):
     node = ast.parse(code)
@@ -93,14 +83,14 @@ def remove_subtree(tree, flag=False):
     if not isinstance(tree, dict):
         return tree
     output = {}
-    
+
     for key, item in tree.items():
         if tree['_PyType'] == 'Call':
             if not flag:
                 output[key] = remove_subtree(item, True)
         else:
             output[key] = remove_subtree(item, flag)
-            
+
             # Modified here. Added try
             try:
                 if len(output[key]) == 0 and key == 'value':
@@ -204,7 +194,7 @@ def iter_fields( node ):
             yield field, getattr( node, field )
         except AttributeError:
             pass
-        
+
 
 def get_body(treedict, parent=None):
     name = iter(treedict.keys())
@@ -250,15 +240,15 @@ def convert_body(body,parent_node = None, root_node = None):
                             node_content = j+' '+'udv'
                         else:
                             node_content = j+' '+json.dumps(body[j])
-                        parent_node = parent_node.addkid(Node(node_content))                        
-                
+                        parent_node = parent_node.addkid(Node(node_content))
+
                 elif isinstance(body[j],list) or isinstance(body[j],str):
                     if body[j]:
                         node_content = j+' '+body[j]
                     else:
                         node_content = j+' '+''
                     parent_node = parent_node.addkid(Node(node_content))
-    return root_node    
+    return root_node
 def seperate_dict(dic):
     dic = dic.copy()
     for i in dic.copy():
@@ -286,4 +276,3 @@ def create_func_dict(body):
             continue
         func_dict[func_name] = func_nodes_list
     return func_dict
-
