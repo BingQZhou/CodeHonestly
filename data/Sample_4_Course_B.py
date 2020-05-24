@@ -35,11 +35,9 @@ def clean_data(df):
     return df
 
 def design_matrix(feat):
-    out = np.zeros((feat.shape[0], feat.shape[1] + 1))
 #     print(out)
     for i in range(len(feat)):
         out[i] = np.array([1] + list(feat[i]))
-    return out
 
 
 # # Q_01

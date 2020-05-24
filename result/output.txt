@@ -1,14 +1,28 @@
 Sample_2.py
 Sample_3.py
-0.9879934152771732
-Similiarity result: 
- Mythod: task_5 ------ task_5 with similiarity: 1.0
- Mythod: task_6 ------ task_6 with similiarity: 1.0
- Mythod: task_7 ------ task_7 with similiarity: 1.0
- Mythod: task_8 ------ task_8 with similiarity: 1.0
- Mythod: task_3 ------ task_3 with similiarity: 0.9712500000000001
- Mythod: task_4 ------ task_4 with similiarity: 0.9567059369202227
- Mythod: task_2 ------ task_2 with similiarity: 0.9127651515151514
- Mythod: task_1 ------ task_1 with similiarity: 0.8556435535619723
- Overall Similiarity Score: 0.9879934152771732
+0.9871212683585289
+Similarity result: 
+ Method: task_5 ------ task_5 with similarity: 1.0
+ Method: task_6 ------ task_6 with similarity: 1.0
+ Method: task_7 ------ task_7 with similarity: 1.0
+ Method: task_8 ------ task_8 with similarity: 1.0
+ Method: task_3 ------ task_3 with similarity: 0.9712500000000001
+ Method: task_4 ------ task_4 with similarity: 0.9579085497835498
+ Method: task_2 ------ task_2 with similarity: 0.9147037037037036
+ Method: task_1 ------ task_1 with similarity: 0.8691769704155374
+ Overall Similarity Score: 0.9871212683585289
+ 
+Sample_2.py
+Sample_1.py
+0.6896527868941235
+Similarity result: 
+ Method: task_7 ------ task_7 with similarity: 0.8543859649122808
+ Method: task_8 ------ task_8 with similarity: 0.8139819245082404
+ Method: task_5 ------ task_5 with similarity: 0.7592420400112707
+ Method: task_6 ------ task_6 with similarity: 0.6035059998966649
+ Method: task_3 ------ task_1 with similarity: 0.5784439221492793
+ Method: task_1 ------ task_4 with similarity: 0.4283400974025974
+ Method: task_2 ------ task_2 with similarity: 0.41925268198183363
+ Method: task_4 ------ task_3 with similarity: 0.27892466329966326
+ Overall Similarity Score: 0.6896527868941235
  

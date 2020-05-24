@@ -219,7 +219,6 @@ def get_body(treedict, parent=None):
         # try to fix the problem by wrapping it to a list......
         return list(body)
     return body
-    
 def convert_body(body,parent_node = None, root_node = None):
     body = seperate_dict(body)
     if isinstance(body, dict):
@@ -238,7 +237,10 @@ def convert_body(body,parent_node = None, root_node = None):
                             parent_node.addkid(new_parent)
                             new_parent = convert_body(body[j],parent_node = new_parent,root_node = root_node)
                         else:
-                            node_content = j+' '+body[j]['_PyType']
+                            call_call_func_name = ''
+                            if j == 'func':
+                                call_call_func_name =' '+body[j]['id']
+                            node_content = j+' '+body[j]['_PyType']+call_call_func_name
                             new_parent = Node(node_content)
                             parent_node.addkid(new_parent)
                             new_parent = convert_body(body[j],parent_node = new_parent,root_node = root_node)
@@ -256,7 +258,7 @@ def convert_body(body,parent_node = None, root_node = None):
                     else:
                         node_content = j+' '+''
                     parent_node = parent_node.addkid(Node(node_content))
-    return root_node
+    return root_node    
 def seperate_dict(dic):
     dic = dic.copy()
     for i in dic.copy():
