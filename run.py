@@ -1,34 +1,25 @@
-import sys
-import json
-import shutil
-import subprocess
-import warnings
+import sys, json, shutil, subprocess, warnings
 
 sys.path.insert(0, './src')
-#import py_file
+
 from API_comparison import *
 warnings.filterwarnings("ignore")
 
 sys.path.insert(0, 'src')
-#from etl import download_apk
+
 from model import run
 
 TEST_DATA_PARAMS = 'config/test-data-params.json'
 TRAIN_DATA_PARAMS = 'config/data-params.json'
 TEST_PROJECT_PARAMS = "config/test-project-params.json"
 
-
-
 def load_params(fp):
     with open(fp) as fh:
         param = json.load(fh)
     return param
 
-
-
-def Sort(sub_li): 
-  
-    return(sorted(sub_li, key = lambda x: x[2], reverse=True))  
+def Sort(sub_li):
+    return sorted(sub_li, key = lambda x: x[2], reverse=True)
 
 def main(targets):
 
@@ -42,15 +33,12 @@ def main(targets):
         cfg = load_params(TEST_PROJECT_PARAMS)
         output_file = cfg['output_file']
         data_dir = cfg['data_dir']
-        output_dir = cfg['output_dir'] 
+        output_dir = cfg['output_dir']
         thre = cfg['threshold']
         output_type = cfg['output_type'] # save or print out or [save and print out]
         output_mode = cfg['output_mode'] # simple or complex
 
-
-
-        onlyfiles = [f for f in listdir(data_dir) if isfile(join(data_dir, f))]
-        all_py = [f for f in onlyfiles if f[-3:] == '.py']
+        all_py = [f for f in listdir(data_dir) if isfile(join(data_dir, f)) if f[-3:] == '.py']
         #print(all_py)
         #thre = 0.3
         fit_result = []
@@ -58,10 +46,8 @@ def main(targets):
         max_info = ''
         file_1 = ''
         file_2 = ''
-        
 
-        
-        comb = combinations(all_py, 2) 
+        comb = combinations(all_py, 2)
         list_ = list(comb)
         for i in range(len(list_)):
             #print(list_)
@@ -81,7 +67,7 @@ def main(targets):
                 break
         if 'save' in output_type:
             try:
-              os.mkdir(output_dir) 
+              os.mkdir(output_dir)
             except:
               pass
             f = open(join(output_dir, output_file), "w")
@@ -94,8 +80,6 @@ def main(targets):
             for i in top_k:
                 for j in i:
                     print(j)
-        
-
 
 
 if __name__ == '__main__':

@@ -1,8 +1,5 @@
 from pre_process import *
 
-
-
-
 def insert_cost(a):
     return 1
 def remove_cost(a):
@@ -130,17 +127,13 @@ def find_peak(mat):
     return max_, x, y
 
 
-def run_files (file1, file2, type_):
+def run_files(file1, file2, type_):
     with open(file1) as f_1:
-        full_lines_1 = ''
-        for i in f_1.readlines():
-            full_lines_1+=i
+        full_lines_1 = f_1.read()
     # for ur own reference
 
     with open(file2) as f_2:
-        full_lines_2 = ''
-        for i in f_2.readlines():
-            full_lines_2+=i
+        full_lines_2 = f_2.read()
     data_1 = json.loads(process(full_lines_1))
     data_2 = json.loads(process(full_lines_2))
 
