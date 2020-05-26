@@ -52,7 +52,7 @@
           <ngx-mat-file-input (change)='processFile($event, 1)'></ngx-mat-file-input>
         </mat-form-field>
         <button mat-raised-button (click)="sendCode()" *ngIf='visualizeMode'>Visualize</button>
-        <button mat-raised-button (click)="null" *ngIf='!visualizeMode'>Get Report</button>
+        <button mat-raised-button (click)="getReport()" *ngIf='!visualizeMode'>Get Report</button>
         <button mat-raised-button (click)="toggleVisualization()">Toggle Mode</button>
       </mat-card-actions>
       <mat-card-footer *ngIf='visualizeMode'>

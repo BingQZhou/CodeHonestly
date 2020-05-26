@@ -90,6 +90,18 @@ sum(1, 2, 3)`, '']
     }
   }
 
+  async getReport(): Promise<void> {
+    let req = await fetch('http://demo.codehonestly.com:5000/simreport', {
+      method: 'POST', headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `pysrc1=${encodeURIComponent(this.code[0])}&pysrc2=${encodeURIComponent(this.code[1])}`
+    })
+    let response = eval(await req.text())
+    alert(response)
+    console.log(response)
+  }
+
   // selectionChange(e: StepperSelectionEvent): void {
   //   if (e.selectedIndex === 2) {
   //     this.sendCode()
