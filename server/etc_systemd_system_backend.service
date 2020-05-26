@@ -1,0 +1,12 @@
+[Unit]
+Description=Flask backend server
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/pyastviz
+ExecStart=/usr/bin/python3 application.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
