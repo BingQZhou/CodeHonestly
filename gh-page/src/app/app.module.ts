@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCardModule } from '@angular/material/card';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     FormsModule,
     MatStepperModule,
     MatCardModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

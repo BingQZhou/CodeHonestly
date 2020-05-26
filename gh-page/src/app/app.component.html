@@ -32,14 +32,32 @@
     <mat-card>
       <mat-card-title>Code Input</mat-card-title>
       <mat-card-content>
+        <mat-form-field style='min-width: 500px;'>
+          <mat-label>Choose example for input 1</mat-label>
+          <mat-select (selectionChange)='handleExample($event)'>
+            <mat-option *ngFor="let example of examples; index as i" [value]="example">
+              Example {{i + 1}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field style='min-width: 500px;font-family: "Courier New"'>
           <mat-label *ngIf='!visualizeMode'>Code Input 1</mat-label>
           <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code[0]" #codeView (keydown)="processTab($event)"></textarea>
         </mat-form-field>
-        <mat-form-field style='min-width: 500px;font-family: "Courier New"' *ngIf='!visualizeMode'>
-          <mat-label>Code Input 2</mat-label>
-          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code[1]" #codeView (keydown)="processTab($event, 1)"></textarea>
-        </mat-form-field>
+        <span *ngIf='!visualizeMode'>
+          <mat-form-field style='min-width: 500px;'>
+            <mat-label>Choose example for input 2</mat-label>
+            <mat-select (selectionChange)='handleExample($event, 1)'>
+              <mat-option *ngFor="let example of examples" [value]="example.value">
+                {{example.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field style='min-width: 500px;font-family: "Courier New"'>
+            <mat-label>Code Input 2</mat-label>
+            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code[1]" #codeView (keydown)="processTab($event, 1)"></textarea>
+          </mat-form-field>
+        </span>
       </mat-card-content>
       <mat-card-actions>
         <mat-form-field class='padded'>

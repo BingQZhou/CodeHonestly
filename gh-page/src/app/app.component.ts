@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { MatSelectChange } from '@angular/material/select';
 // import { StepperSelectionEvent } from '@angular/cdk/stepper';
 // import * as vtree from '../assets/vtree.min.js';
 
@@ -13,6 +14,19 @@ export class AppComponent implements AfterViewInit {
   // @ViewChild('codeView') codeView: ElementRef
   // @ViewChild('codeView2') codeView2: ElementRef
   @ViewChildren('codeView') codeViews: QueryList<ElementRef>
+
+  examples = [
+`def a():
+  return b()
+`,
+`import pandas as pd
+def find_mean_by_group(df, col):
+  return df.groupby(col).mean()
+
+test = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]], columns=['a', 'b', 'c'])
+find_mean_by_group(test, a)
+`
+  ]
 
   code: string[] = [`# demonstration of preprocessing and normalizing imports
 import pandas as pd
@@ -100,6 +114,10 @@ sum(1, 2, 3)`, '']
     let response = eval(await req.text())
     alert(response)
     console.log(response)
+  }
+
+  handleExample(e: MatSelectChange, index=0):void {
+    this.code[index] = e.value
   }
 
   // selectionChange(e: StepperSelectionEvent): void {
