@@ -44,7 +44,7 @@ elif INPUT_FORMAT == 'rdd':
     from pyspark.mllib.tree import DecisionTree
     from pyspark.mllib.regression import LabeledPoint
     from pyspark.mllib.linalg import DenseVector
-    from pyspark.mllib.evaluation import RegressionMetrics 
+    from pyspark.mllib.evaluation import RegressionMetrics
 # ---------- Begin definition of helper functions, if you need any ------------
 
 # def task_1_helper():
@@ -78,7 +78,7 @@ def task_1(data_io, review_data, product_data):
     variance_countRating, numNulls_countRating = asin_.agg(F.count(asin_column), F.avg(mean_rating_column),\
                         F.variance(mean_rating_column), F.sum((F.isnull(mean_rating_column)).cast("int")), \
                     F.avg(count_rating_column), F.variance(count_rating_column), F.sum((F.isnull(count_rating_column)).cast("int"))).collect()[0]
-     
+
 
 
     # -------------------------------------------------------------------------
@@ -106,7 +106,7 @@ def task_1(data_io, review_data, product_data):
     res[ 'mean_countRating']  = mean_countRating
     res[ 'variance_countRating']  = variance_countRating
     res[ 'numNulls_countRating']  = numNulls_countRating
-    
+
     print(count_total)
     print(type(count_total))
 
@@ -272,9 +272,9 @@ def task_4(data_io, product_data):
     process_ = product_data.withColumn(price_column, cast_)
     #process_.show(5)
     null_ = F.when(process_.price.isNull(),process_.select(F.mean(price_column)).head()[0]).otherwise(process_.price)
-    process_ = process_.withColumn('meanImputedPrice', null_ )  
+    process_ = process_.withColumn('meanImputedPrice', null_ )
     null_ = F.when(process_.price.isNull(), process_.approxQuantile('Price', [0.5], 0.0)[0]).otherwise(process_.price)
-    process_ = process_.withColumn('medianImputedPrice', null_)                                                                    
+    process_ = process_.withColumn('medianImputedPrice', null_)
     #process_.show(5)
 
     null_ = F.when( (process_.title.isNull())|(process_.title ==''), 'unknow').otherwise(\
@@ -386,7 +386,7 @@ def task_6(data_io, product_processed_data):
     categoryIndex_column = 'categoryIndex'
     categoryOneHot_column = 'categoryOneHot'
     categoryPCA_column = 'categoryPCA'
-    # -------------------------------------------------------------------------    
+    # -------------------------------------------------------------------------
 
     # ---------------------- Your implementation begins------------------------
 
@@ -424,20 +424,20 @@ def task_6(data_io, product_processed_data):
     # -------------------------------------------------------------------------
 
 def task_7(data_io, train_data, test_data):
-    
+
     # ---------------------- Your implementation begins------------------------
     dt = DecisionTreeRegressor(labelCol="overall", featuresCol="features", maxDepth=5)
     model = dt.fit(train_data)
     predictions = model.transform(test_data)
     evaluator = RegressionEvaluator(labelCol="overall", predictionCol="prediction", metricName="rmse")
     rmse = evaluator.evaluate(predictions)
-    
-    
-    
-    
+
+
+
+
     # -------------------------------------------------------------------------
-    
-    
+
+
     # ---------------------- Put results in res dict --------------------------
     res = {
         'test_rmse': None
@@ -452,7 +452,7 @@ def task_7(data_io, train_data, test_data):
     return res
     # -------------------------------------------------------------------------
 def task_8(data_io, train_data, test_data):
-    
+
     # ---------------------- Your implementation begins------------------------
     trainingData, testData = train_data.randomSplit([0.75, 0.25])
     best = 0
@@ -473,13 +473,13 @@ def task_8(data_io, train_data, test_data):
     predictions = best_model.transform(test_data)
     evaluator = RegressionEvaluator(labelCol="overall", predictionCol="prediction", metricName="rmse")
     rmse = evaluator.evaluate(predictions)
-    
-    
-    
-    
+
+
+
+
     # -------------------------------------------------------------------------
-    
-    
+
+
     # ---------------------- Put results in res dict --------------------------
     res = {
         'test_rmse': None,
@@ -494,8 +494,8 @@ def task_8(data_io, train_data, test_data):
     res['valid_rmse_depth_7'] = all_rmse[1]
     res['valid_rmse_depth_9'] = all_rmse[2]
     res['valid_rmse_depth_12'] = all_rmse[3]
-    
-    
+
+
 
     # -------------------------------------------------------------------------
 
