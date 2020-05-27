@@ -47,9 +47,9 @@
         <span *ngIf='!visualizeMode'>
           <mat-form-field style='min-width: 500px;'>
             <mat-label>Choose example for input 2</mat-label>
-            <mat-select (selectionChange)='handleExample($event, 1)'>
-              <mat-option *ngFor="let example of examples" [value]="example.value">
-                {{example.viewValue}}
+            <mat-select (selectionChange)='handleExample($event)'>
+              <mat-option *ngFor="let example of examples; index as i" [value]="example">
+                Example {{i + 1}}
               </mat-option>
             </mat-select>
           </mat-form-field>
