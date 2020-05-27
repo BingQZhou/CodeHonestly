@@ -76,18 +76,18 @@ def get_sim_matrix(data_1, data_2):
             for k in range(N1):
                 API_1 = info_1[1][k]
                 max_sim = -1
-                max_edit = 10000
                 for j in range(N2):
                     API_2 = info_2[1][j]
                     if API_1 == API_2:
-                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
+                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost).round(3)
                         max_len = max(info_1[0][k], info_2[0][j])
                         sim = (max_len - dist)/max_len
                         matrix[k, j] = sim
                         if sim > max_sim:
-                            max_edit = dist
                             max_sim = sim
-                            #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+#                         print(info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+                    else:
+                        continue
                 if max_sim == -1:
                     detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
                     matrix[k, N2-1] = 0
@@ -112,6 +112,8 @@ def get_score(matrix):
 
             temp_ = max(temp_)
             sum_ = sum_ + temp_
+        else:
+            sum_ = sum_ + 0
     return sum_ / mth_1_len
 
 def find_peak(mat):
@@ -127,22 +129,12 @@ def find_peak(mat):
     return max_, x, y
 
 
-def run_files(file1, file2, type_):
-    with open(file1) as f_1:
-        full_lines_1 = f_1.read()
-    # for ur own reference
-
-    with open(file2) as f_2:
-        full_lines_2 = f_2.read()
-    data_1 = json.loads(process(full_lines_1))
-    data_2 = json.loads(process(full_lines_2))
-
-
+def run_files(data_1, data_2, type_):
     body_2 = get_body(data_2)
-    result_2 = create_func_dict(body_2[1:])
+    result_2 = create_func_dict(body_2)
 
     body_1 = get_body(data_1)
-    result_1 = create_func_dict(body_1[1:])
+    result_1 = create_func_dict(body_1)
     #print(result_1)
 
     data_1 = get_smaller(result_1)
@@ -195,7 +187,7 @@ def run_files(file1, file2, type_):
              #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
     all_nodes = 0
-    for i in range (len(final_pair)):
+    for i in range(len(final_pair)):
         #str_  = str_  + str(final_pair[i][0]) + str(len(data_1[list(data_1.keys())[i]][0])) + '\n '
         #print(final_pair[i][0], len(data_1[list(data_1.keys())[i]][0]))
         score_list = score_list + [final_pair[i][0]*(len(data_1[list(data_1.keys())[i]][0]))]

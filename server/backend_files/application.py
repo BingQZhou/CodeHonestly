@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask import render_template
 from flask_cors import CORS
-import preprocess as pp, json, similarity as sim
+import preprocess as pp, json, similarity as sim, traceback, logging
 
 application = Flask(__name__)
 CORS(application)
@@ -16,10 +16,13 @@ def process():
 
 @application.route('/simreport', methods=['POST'])
 def similarity():
-    tree1 = pp.process(request.form.get('pysrc1'))
-    tree2 = pp.process(request.form.get('pysrc2'))
-    return json.dumps(sim.process(tree1, tree2))
+    try:
+        tree1 = pp.process(request.form.get('pysrc1'))
+        tree2 = pp.process(request.form.get('pysrc2'))
+        return json.dumps(sim.process(tree1, tree2))
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        return json.dumps([[0, 0, 0, 0]])
 
 if __name__ == '__main__':
     application.run(debug=True, host='0.0.0.0')
-
