@@ -81,6 +81,7 @@ def get_sim_matrix(data_1, data_2):
                     API_2 = info_2[1][j]
                     if API_1 == API_2:
                         dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
+
                         max_len = max(info_1[0][k], info_2[0][j])
                         sim = (max_len - dist)/max_len
                         matrix[k, j] = sim
@@ -88,12 +89,12 @@ def get_sim_matrix(data_1, data_2):
                             max_edit = dist
                             max_sim = sim
                             #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
-                if max_sim == -1:
-                    detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
-                    matrix[k, N2-1] = 0
-                else:
-                    detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
-                new[i][n].append(detail)
+                    if max_sim == -1:
+                        detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
+                        matrix[k, N2-1] = 0
+                    else:
+                        detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
+                    new[i][n].append(detail)
 
             temp[i].append(matrix)
 

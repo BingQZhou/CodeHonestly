@@ -111,7 +111,6 @@ def preprocess_import_and_call_statements(graph):
     imports = {}
     while len(queue):
         polled = queue.pop(0)
-
         if polled['_PyType'] in ['Import', 'ImportFrom']:
             for name in polled['names']:
                 if name['asname'] is not None:
