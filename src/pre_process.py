@@ -196,6 +196,9 @@ def iter_fields( node ):
 
 
 def get_body(treedict, parent=None):
+    if isinstance(treedict,str):
+        print("error!!!")
+        print(treedict)
     name = iter(treedict.keys())
     body = ''
     for i in name:

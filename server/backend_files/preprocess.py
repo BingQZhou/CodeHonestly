@@ -24,13 +24,14 @@ def remove_unnecessary(cpy):
     queue = cpy['body'][:]
     while len(queue):
         polled = queue.pop(0)
-        for key in unnecessary_set:
-            if key in polled:
-                del polled[key]
-        queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
-        for key in polled.keys():
-            if isinstance(polled[key], list):
-                queue.extend(polled[key])
+        if isinstance(polled, dict):
+            for key in unnecessary_set:
+                if key in polled:
+                    del polled[key]
+            queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
+            for key in polled.keys():
+                if isinstance(polled[key], list):
+                    queue.extend(polled[key])
 # a = default tree
 # a['body'] = uchain_body_calls['body']
 def unchain_body_calls(body):
@@ -88,7 +89,7 @@ def remove_subtree(tree, flag=False):
     if not isinstance(tree, dict):
         return tree
     output = {}
-    
+
     for key, item in tree.items():
         if tree['_PyType'] == 'Call':
             if not flag:
@@ -114,25 +115,26 @@ def preprocess_import_and_call_statements(graph):
     while len(queue):
         polled = queue.pop(0)
 
-        if polled['_PyType'] == 'Import':
-            for name in polled['names']:
-                if name['asname'] is not None:
-                    imports[name['asname']] = name['name']
-                else:
-                    imports[name['name']] = name['name']
-        elif polled['_PyType'] == 'ImportFrom':
-            for name in polled['names']:
-                if name['asname'] is not None:
-                    imports[name['asname']] = polled['module'] + '.' + name['name']
-                else:
-                    imports[name['name']] = polled['module'] + '.' + name['name']
-        elif polled['_PyType'] == 'FunctionDef':
-            udfs.add(polled['name'])
+        if isinstance(polled, dict):
+            if polled['_PyType'] == 'Import':
+                for name in polled['names']:
+                    if name['asname'] is not None:
+                        imports[name['asname']] = name['name']
+                    else:
+                        imports[name['name']] = name['name']
+            elif polled['_PyType'] == 'ImportFrom':
+                for name in polled['names']:
+                    if name['asname'] is not None:
+                        imports[name['asname']] = polled['module'] + '.' + name['name']
+                    else:
+                        imports[name['name']] = polled['module'] + '.' + name['name']
+            elif polled['_PyType'] == 'FunctionDef':
+                udfs.add(polled['name'])
 
-        queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
-        for key in polled.keys():
-            if isinstance(polled[key], list):
-                queue.extend(polled[key])
+            queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict)])
+            for key in polled.keys():
+                if isinstance(polled[key], list):
+                    queue.extend(polled[key])
     queue = graph['body'][:]
     while len(queue):
         polled = queue.pop(0)
@@ -150,10 +152,10 @@ def preprocess_import_and_call_statements(graph):
                 elif polled['id'] not in built_ins and polled['id'] not in udfs:
                     polled['type'] = 'udv'
 
-        queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict) and key != 'id'])
-        for key in polled.keys():
-            if isinstance(polled[key], list):
-                queue.extend(polled[key])
+            queue.extend([polled[key] for key in polled.keys() if isinstance(polled[key], dict) and key != 'id'])
+            for key in polled.keys():
+                if isinstance(polled[key], list):
+                    queue.extend(polled[key])
 
     return imports, graph
 
@@ -202,4 +204,3 @@ def iter_fields( node ):
             yield field, getattr( node, field )
         except AttributeError:
             pass
-

@@ -1,6 +1,7 @@
-import zss, numpy as np
+import zss, numpy as np, logging, re, traceback
 from zss import Node, distance
 from helpers import *
+
 def insert_cost(a):
     return 1
 def remove_cost(a):
@@ -77,24 +78,25 @@ def get_sim_matrix(data_1, data_2):
             for k in range(N1):
                 API_1 = info_1[1][k]
                 max_sim = -1
+                max_edit = 10000
                 for j in range(N2):
                     API_2 = info_2[1][j]
                     if API_1 == API_2:
-                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost).round(3)
+                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
+
                         max_len = max(info_1[0][k], info_2[0][j])
                         sim = (max_len - dist)/max_len
                         matrix[k, j] = sim
                         if sim > max_sim:
+                            max_edit = dist
                             max_sim = sim
-#                         print(info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+                            #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+                    if max_sim == -1:
+                        detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
+                        matrix[k, N2-1] = 0
                     else:
-                        continue
-                if max_sim == -1:
-                    detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
-                    matrix[k, N2-1] = 0
-                else:
-                    detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
-                new[i][n].append(detail)
+                        detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
+                    new[i][n].append(detail)
 
             temp[i].append(matrix)
 
@@ -113,8 +115,6 @@ def get_score(matrix):
 
             temp_ = max(temp_)
             sum_ = sum_ + temp_
-        else:
-            sum_ = sum_ + 0
     return sum_ / mth_1_len
 
 def find_peak(mat):
@@ -155,8 +155,11 @@ def run_files(data_1, data_2, type_):
 
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
-            score = get_score(temp[list(data_1.keys())[i]][j])
-            matrix[i][j] = score
+            try:
+                score = get_score(temp[list(data_1.keys())[i]][j])
+                matrix[i][j] = score
+            except IndexError:
+                matrix[i][j] = 0
 
     #print(matrix)
 
@@ -188,7 +191,7 @@ def run_files(data_1, data_2, type_):
              #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
     all_nodes = 0
-    for i in range(len(final_pair)):
+    for i in range (len(final_pair)):
         #str_  = str_  + str(final_pair[i][0]) + str(len(data_1[list(data_1.keys())[i]][0])) + '\n '
         #print(final_pair[i][0], len(data_1[list(data_1.keys())[i]][0]))
         score_list = score_list + [final_pair[i][0]*(len(data_1[list(data_1.keys())[i]][0]))]
@@ -197,4 +200,3 @@ def run_files(data_1, data_2, type_):
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
     #print('Overall Similiarity Score: ', score_ )
     return score_, str_
-

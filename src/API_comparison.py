@@ -126,6 +126,13 @@ def find_peak(mat):
                 max_ = mat[i][j]
     return max_, x, y
 
+def read_files(file):
+    with open(file) as f:
+        full_lines = ''
+        for i in f.readlines():
+            full_lines+=i
+    return json.loads(process(full_lines))
+
 
 def run_files(data_1, data_2, type_):
     body_2 = get_body(data_2)

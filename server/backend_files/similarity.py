@@ -1,4 +1,4 @@
-import sys
+import sys, logging
 from itertools import combinations
 from API_comparison import *
 
