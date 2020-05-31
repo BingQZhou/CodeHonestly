@@ -1,28 +1,26 @@
-Sample_2.py
-Sample_3.py
-0.9881416765217941
+coursera_2.py
+coursera_1.py
+0.5653910795087266
 Similarity result: 
- Method: task_5 ------ task_5 with similarity: 1.0
- Method: task_6 ------ task_6 with similarity: 1.0
- Method: task_7 ------ task_7 with similarity: 1.0
- Method: task_8 ------ task_8 with similarity: 1.0
- Method: task_3 ------ task_3 with similarity: 0.9855357142857143
- Method: task_4 ------ task_4 with similarity: 0.9579085497835498
- Method: task_2 ------ task_2 with similarity: 0.9147037037037036
- Method: task_1 ------ task_1 with similarity: 0.8691769704155374
- Overall Similarity Score: 0.9881416765217941
+ Method: start_timer ------ start with similarity: 1.0
+ Method: stop_timer ------ stop with similarity: 1.0
+ Method: reset_timer ------ reset with similarity: 1.0
+ Method: format ------ format with similarity: 0.9142857142857144
+ Method: draw ------ draw with similarity: 0.43579831932773117
+ Method: timer_handler ------ counter with similarity: 0.0
+ Overall Similarity Score: 0.5653910795087266
  
-Sample_2.py
-Sample_1.py
-0.6905456440369806
+coursera_3.py
+coursera_2.py
+0.4923076923076924
 Similarity result: 
- Method: task_7 ------ task_7 with similarity: 0.8543859649122808
- Method: task_8 ------ task_8 with similarity: 0.8139819245082404
- Method: task_5 ------ task_5 with similarity: 0.7592420400112707
- Method: task_6 ------ task_6 with similarity: 0.6035059998966649
- Method: task_3 ------ task_1 with similarity: 0.5909439221492793
- Method: task_1 ------ task_4 with similarity: 0.4283400974025974
- Method: task_2 ------ task_2 with similarity: 0.41925268198183363
- Method: task_4 ------ task_3 with similarity: 0.27892466329966326
- Overall Similarity Score: 0.6905456440369806
+ Method: format ------ format with similarity: 0.4923076923076924
+ Overall Similarity Score: 0.4923076923076924
+ 
+coursera_3.py
+coursera_1.py
+0.4923076923076924
+Similarity result: 
+ Method: format ------ format with similarity: 0.4923076923076924
+ Overall Similarity Score: 0.4923076923076924
  

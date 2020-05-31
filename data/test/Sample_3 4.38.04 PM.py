@@ -44,7 +44,7 @@ elif INPUT_FORMAT == 'rdd':
     from pyspark.mllib.tree import DecisionTree
     from pyspark.mllib.regression import LabeledPoint
     from pyspark.mllib.linalg import DenseVector
-    from pyspark.mllib.evaluation import RegressionMetrics
+    from pyspark.mllib.evaluation import RegressionMetrics 
 # ---------- Begin definition of helper functions, if you need any ------------
 
 # def task_1_helper():
@@ -52,7 +52,8 @@ elif INPUT_FORMAT == 'rdd':
 
 # -----------------------------------------------------------------------------
 
-# %load -s task_1 assignment2.py
+
+
 def task_1(data_io, review_data, product_data):
     # -----------------------------Column names--------------------------------
     # Inputs:
@@ -64,23 +65,20 @@ def task_1(data_io, review_data, product_data):
     # -------------------------------------------------------------------------
 
     # ---------------------- Your implementation begins------------------------
-    count_rating_column = review_data.groupBy('asin').count()
-    count_total =  product_data.join(count_rating_column, product_data['asin'] == count_rating_column['asin'], 'left_outer').count()
+
     asin_ = product_data.select('asin')
     asin_ = asin_.join(review_data.select('asin', 'overall'), \
             how = 'left', on = 'asin')
     asin_ = asin_.groupby('asin').agg(F.count('overall'), F.avg('overall'))
-    asin_ = asin_.withColumnRenamed('count(overall)', 'countRating')
     asin_ = asin_.withColumnRenamed('avg(overall)','meanRating')
-
+    asin_ = asin_.withColumnRenamed('count(overall)', 'countRating')
     null_ = F.when(asin_.countRating==0, None).otherwise(asin_.countRating)
-    asin_ = asin_.withColumn('countRating', null_)
-
-    mean_meanRating,variance_meanRating,numNulls_meanRating,mean_countRating,\
-    variance_countRating, numNulls_countRating = asin_.agg(F.avg('meanRating'),\
-                        F.variance('meanRating'), F.sum((F.isnull('meanRating')).cast("int")), \
-                    F.avg('countRating'), F.variance('countRating'), F.sum((F.isnull('countRating')).cast("int"))).collect()[0]
-
+    asin_ = asin_.withColumn(count_rating_column, null_)
+    count_total,mean_meanRating,variance_meanRating,numNulls_meanRating,mean_countRating,\
+    variance_countRating, numNulls_countRating = asin_.agg(F.count(asin_column), F.avg(mean_rating_column),\
+                        F.variance(mean_rating_column), F.sum((F.isnull(mean_rating_column)).cast("int")), \
+                    F.avg(count_rating_column), F.variance(count_rating_column), F.sum((F.isnull(count_rating_column)).cast("int"))).collect()[0]
+     
 
 
     # -------------------------------------------------------------------------
@@ -108,7 +106,7 @@ def task_1(data_io, review_data, product_data):
     res[ 'mean_countRating']  = mean_countRating
     res[ 'variance_countRating']  = variance_countRating
     res[ 'numNulls_countRating']  = numNulls_countRating
-
+    
     print(count_total)
     print(type(count_total))
 
@@ -134,23 +132,22 @@ def task_2(data_io, product_data):
     # -------------------------------------------------------------------------
 
     # ---------------------- Your implementation begins------------------------
-    first_item_ = product_data['categories'][0][0]
+    first_item = product_data.categories.getItem(0)
+    first_item_ = first_item.getItem(0)
     procesed_ = product_data.withColumn(category_column, first_item_)
-    null_ = F.when(procesed_.category=='', None).otherwise(procesed_.category)
+    null_ = F.when(procesed_.categories=='', None).otherwise(procesed_.categories)
     procesed_ = procesed_.withColumn(category_column, null_)
-    map_key = F.map_keys('salesRank')[0]
-    procesed_ = procesed_.withColumn('bestSalesCategory', map_key)
-    map_value = F.map_values('salesRank')[0]
-    procesed_ = procesed_.withColumn('bestSalesRank', map_value)
-    count_total, mean_bestSalesRank, variance_bestSalesRank = procesed_.agg(F.count('asin'), \
-      F.mean('bestSalesRank'), F.variance('bestSalesRank')).collect()[0]
+    map_key = F.map_keys(salesRank_column)[0]
+    procesed_ = procesed_.withColumn(bestSalesCategory_column, map_key)
+    map_value = F.map_values(salesRank_column)[0]
+    procesed_ = procesed_.withColumn(bestSalesRank_column, map_value)
+    count_total, mean_bestSalesRank, variance_bestSalesRank = procesed_.agg(F.count(asin_column), \
+      F.mean(bestSalesRank_column), F.variance(bestSalesRank_column)).collect()[0]
 
-    countDistinct_category = procesed_.filter(procesed_["category"] != '')
-    countDistinct_category = countDistinct_category.groupBy("category")
-    countDistinct_category = countDistinct_category.agg(F.countDistinct("category")).count()
+    countDistinct_category = procesed_.filter(procesed_["category"] != '').groupBy("category").agg(F.countDistinct("category")).count()
 
-    sales = procesed_.select('bestSalesCategory').filter( \
-        procesed_.bestSalesCategory.isNotNull())
+    sales = procesed_.select(bestSalesCategory_column).filter( \
+        procesed_[bestSalesCategory_column].isNotNull())
 
     numNulls_bestSalesCategory, temp =  procesed_.agg(F.sum((F.isnull(procesed_[bestSalesCategory_column])).cast("int")),\
                                                     F.sum((F.isnull(procesed_[bestSalesCategory_column])).cast("int"))).collect()[0]
@@ -160,7 +157,6 @@ def task_2(data_io, product_data):
     sales.agg(F.countDistinct(procesed_.bestSalesCategory).alias('bestSalesCategory'),\
                  F.countDistinct(procesed_.bestSalesCategory).alias('bestSalesCategory')\
                 ).collect()[0]
-
 
     # -------------------------------------------------------------------------
 
@@ -207,14 +203,14 @@ def task_3(data_io, product_data):
 
     # ---------------------- Your implementation begins------------------------
 
-    processed_ = product_data.select(asin_column,related_column, price_column)
+    processed_ = product_data.select(asin_column, price_column, related_column)
     processed_ = processed_.withColumn('meanPriceAlsoViewed', processed_.related.getItem(attribute))
     pro_ = processed_.select(processed_.asin, F.explode(processed_.meanPriceAlsoViewed))
     pro_ = pro_.withColumnRenamed('asin','pro__asin')
 
     processed_ = processed_.select(asin_column, price_column)
-    pro_ = pro_.join(processed_, pro_.col == processed_.asin, how = 'left')
-    pro_ = pro_.groupby( 'pro__asin').agg(F.mean(price_column),F.count('col'))
+    pro_ = pro_.join(processed_, pro_.col == processed_.asin, how = 'left').groupby( 'pro__asin').agg(F.mean(price_column),\
+                                                                        F.count('col'))
     processed_ = processed_.join(pro_, processed_.asin == pro_.pro__asin, how = 'left').select(asin_column,'avg(price)', 'count(col)')
 
 
@@ -259,7 +255,6 @@ def task_3(data_io, product_data):
     return res
     # -------------------------------------------------------------------------
 
-
 # %load -s task_4 assignment2.py
 def task_4(data_io, product_data):
     # -----------------------------Column names--------------------------------
@@ -274,29 +269,27 @@ def task_4(data_io, product_data):
 
     # ---------------------- Your implementation begins------------------------
     cast_ = product_data.price.cast(FloatType())
-    process_ = product_data.withColumn('price', cast_)
+    process_ = product_data.withColumn(price_column, cast_)
     #process_.show(5)
-    null_ = F.when(process_.price.isNull(),process_.select(F.mean('price')).head()[0]).otherwise(process_.price)
-    process_ = process_.withColumn('meanImputedPrice', null_ )
+    null_ = F.when(process_.price.isNull(),process_.select(F.mean(price_column)).head()[0]).otherwise(process_.price)
+    process_ = process_.withColumn('meanImputedPrice', null_ )  
     null_ = F.when(process_.price.isNull(), process_.approxQuantile('Price', [0.5], 0.0)[0]).otherwise(process_.price)
-    process_ = process_.withColumn('medianImputedPrice', null_)
+    process_ = process_.withColumn('medianImputedPrice', null_)                                                                    
     #process_.show(5)
 
-    null_ = F.when( (process_.title =='') |(process_.title.isNull()), 'unknow').otherwise( process_.title)
+    null_ = F.when( (process_.title.isNull())|(process_.title ==''), 'unknow').otherwise(\
+                process_.title)
     process_ = process_.withColumn('unknownImputedTitle', null_)
     #process_.show(5)
 
-    #numUnknowns_unknownImputedTitle = process_.where(process_.unknownImputedTitle == 'unknow').count()
-    process_2 = process_.select('meanImputedPrice', 'medianImputedPrice')
+    numUnknowns_unknownImputedTitle = process_.where(process_.unknownImputedTitle == 'unknow').count()
+    process_ = process_.select(meanImputedPrice_column, medianImputedPrice_column)
 
-
-    count_total, mean_meanImputedPrice, variance_meanImputedPrice, \
-    numNulls_meanImputedPrice, mean_medianImputedPrice, \
+    count_total, mean_meanImputedPrice, variance_meanImputedPrice, numNulls_meanImputedPrice, mean_medianImputedPrice, \
     variance_medianImputedPrice, numNulls_medianImputedPrice= \
-    process_2.agg(F.count(meanImputedPrice_column), F.mean(meanImputedPrice_column), F.variance(meanImputedPrice_column),\
+    process_.agg(F.count(meanImputedPrice_column), F.mean(meanImputedPrice_column), F.variance(meanImputedPrice_column),\
                     F.sum((F.isnull('medianImputedPrice')).cast("int")),\
-                     F.mean(medianImputedPrice_column), F.variance(medianImputedPrice_column),\
-                 F.sum((F.isnull('medianImputedPrice')).cast("int")\
+                     F.mean(medianImputedPrice_column), F.variance(medianImputedPrice_column), F.sum((F.isnull('medianImputedPrice')).cast("int")\
                                     )).collect()[0]
 
 
@@ -324,7 +317,7 @@ def task_4(data_io, product_data):
     res['mean_medianImputedPrice' ]  = mean_medianImputedPrice
     res['variance_medianImputedPrice' ]  = variance_medianImputedPrice
     res['numNulls_medianImputedPrice' ]  = numNulls_medianImputedPrice
-    res['numUnknowns_unknownImputedTitle' ]  = process_.where(process_.unknownImputedTitle == 'unknow').count()
+    res['numUnknowns_unknownImputedTitle' ]  = numUnknowns_unknownImputedTitle
 
 
 
@@ -334,6 +327,7 @@ def task_4(data_io, product_data):
     data_io.save(res, 'task_4')
     return res
     # -------------------------------------------------------------------------
+
 
 # %load -s task_5 assignment2.py
 def task_5(data_io, product_processed_data, word_0, word_1, word_2):
@@ -392,7 +386,7 @@ def task_6(data_io, product_processed_data):
     categoryIndex_column = 'categoryIndex'
     categoryOneHot_column = 'categoryOneHot'
     categoryPCA_column = 'categoryPCA'
-    # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------    
 
     # ---------------------- Your implementation begins------------------------
 
@@ -429,22 +423,21 @@ def task_6(data_io, product_processed_data):
     return res
     # -------------------------------------------------------------------------
 
-
 def task_7(data_io, train_data, test_data):
-
+    
     # ---------------------- Your implementation begins------------------------
     dt = DecisionTreeRegressor(labelCol="overall", featuresCol="features", maxDepth=5)
     model = dt.fit(train_data)
     predictions = model.transform(test_data)
     evaluator = RegressionEvaluator(labelCol="overall", predictionCol="prediction", metricName="rmse")
     rmse = evaluator.evaluate(predictions)
-
-
-
-
+    
+    
+    
+    
     # -------------------------------------------------------------------------
-
-
+    
+    
     # ---------------------- Put results in res dict --------------------------
     res = {
         'test_rmse': None
@@ -459,7 +452,7 @@ def task_7(data_io, train_data, test_data):
     return res
     # -------------------------------------------------------------------------
 def task_8(data_io, train_data, test_data):
-
+    
     # ---------------------- Your implementation begins------------------------
     trainingData, testData = train_data.randomSplit([0.75, 0.25])
     best = 0
@@ -480,13 +473,13 @@ def task_8(data_io, train_data, test_data):
     predictions = best_model.transform(test_data)
     evaluator = RegressionEvaluator(labelCol="overall", predictionCol="prediction", metricName="rmse")
     rmse = evaluator.evaluate(predictions)
-
-
-
-
+    
+    
+    
+    
     # -------------------------------------------------------------------------
-
-
+    
+    
     # ---------------------- Put results in res dict --------------------------
     res = {
         'test_rmse': None,
@@ -501,8 +494,8 @@ def task_8(data_io, train_data, test_data):
     res['valid_rmse_depth_7'] = all_rmse[1]
     res['valid_rmse_depth_9'] = all_rmse[2]
     res['valid_rmse_depth_12'] = all_rmse[3]
-
-
+    
+    
 
     # -------------------------------------------------------------------------
 

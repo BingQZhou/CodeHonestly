@@ -85,15 +85,13 @@ def get_sim_matrix(data_1, data_2):
                         matrix[k, j] = sim
                         if sim > max_sim:
                             max_sim = sim
-#                         print(info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+                            #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+                    if max_sim == -1:
+                        detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
+                        matrix[k, N2-1] = 0
                     else:
-                        continue
-                if max_sim == -1:
-                    detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
-                    matrix[k, N2-1] = 0
-                else:
-                    detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
-                new[i][n].append(detail)
+                        detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
+                    new[i][n].append(detail)
 
             temp[i].append(matrix)
 
@@ -127,6 +125,13 @@ def find_peak(mat):
                 y = j
                 max_ = mat[i][j]
     return max_, x, y
+
+def read_files(file):
+    with open(file) as f:
+        full_lines = ''
+        for i in f.readlines():
+            full_lines+=i
+    return json.loads(process(full_lines))
 
 
 def run_files(data_1, data_2, type_):

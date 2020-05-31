@@ -53,7 +53,7 @@ def main(targets):
             #print(list_)
             f1 = list_[i][0]
             f2 = list_[i][1]
-            score_ , str_ = run_files(join(data_dir,f1), join(data_dir,f2), output_mode)
+            score_ , str_ = run_files(read_files(join(data_dir,f1)), read_files(join(data_dir,f2)), output_mode)
             fit_result = fit_result + [[list_[i][0], list_[i][1], score_, str_]]
 
         string_ = Sort(fit_result)
