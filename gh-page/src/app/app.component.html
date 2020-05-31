@@ -1,97 +1,13 @@
-<!-- <mat-horizontal-stepper (selectionChange)="selectionChange($event)">
-  <mat-step>
-    <ng-template matStepLabel>Code</ng-template>
-    <mat-form-field style='min-width: 500px;font-family: "Courier New"'>
-      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code" #codeView (keydown)="processTab($event)"></textarea>
-    </mat-form-field>
-    <div>
-      <mat-form-field class='padded'>
-        <mat-label>Upload file to use</mat-label>
-        <ngx-mat-file-input (change)='processFile($event)'></ngx-mat-file-input>
-      </mat-form-field>
-      <button matStepperNext mat-raised-button>Next</button>
-    </div>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Options</ng-template>
-    <button mat-raised-button matStepperNext (click)="sendCode()">Visualize</button>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Visualization</ng-template>
-    <div>
-      <ul>
-        <li *ngFor='let element of imports | keyvalue'>{{element.key}} > {{element.value}}</li>
-      </ul>
-    </div>
-    <div id='container'></div>
-  </mat-step>
-</mat-horizontal-stepper> -->
-
 <mat-grid-list cols='3' class='full-height' rowHeight='100%'>
-  <mat-grid-tile>
-    <mat-card>
-      <mat-card-title>Code Input</mat-card-title>
-      <mat-card-content>
-        <mat-form-field style='min-width: 500px;'>
-          <mat-label>Choose example for input 1</mat-label>
-          <mat-select (selectionChange)='handleExample($event)'>
-            <mat-option *ngFor="let example of examples; index as i" [value]="example">
-              Example {{i + 1}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field style='min-width: 500px;font-family: "Courier New"'>
-          <mat-label *ngIf='!visualizeMode'>Code Input 1</mat-label>
-          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code[0]" #codeView (keydown)="processTab($event)"></textarea>
-        </mat-form-field>
-        <span *ngIf='!visualizeMode'>
-          <mat-form-field style='min-width: 500px;'>
-            <mat-label>Choose example for input 2</mat-label>
-            <mat-select (selectionChange)='handleExample($event, 1)'>
-              <mat-option *ngFor="let example of examples; index as i" [value]="example">
-                Example {{i + 1}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field style='min-width: 500px;font-family: "Courier New"'>
-            <mat-label>Code Input 2</mat-label>
-            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="20" [(ngModel)]="code[1]" #codeView (keydown)="processTab($event, 1)"></textarea>
-          </mat-form-field>
-        </span>
-      </mat-card-content>
-      <mat-card-actions>
-        <mat-form-field class='padded'>
-          <mat-label *ngIf='visualizeMode'>Upload file to use</mat-label>
-          <mat-label *ngIf='!visualizeMode'>Input 1 file</mat-label>
-          <ngx-mat-file-input (change)='processFile($event)'></ngx-mat-file-input>
-        </mat-form-field>
-        <mat-form-field class='padded' *ngIf='!visualizeMode'>
-          <mat-label *ngIf='!visualizeMode'>Input 2 file</mat-label>
-          <ngx-mat-file-input (change)='processFile($event, 1)'></ngx-mat-file-input>
-        </mat-form-field>
-        <button mat-raised-button (click)="sendCode()" *ngIf='visualizeMode'>Visualize</button>
-        <button mat-raised-button (click)="getReport()" *ngIf='!visualizeMode'>Get Report</button>
-        <button mat-raised-button (click)="toggleVisualization()">Toggle Mode</button>
-      </mat-card-actions>
-      <mat-card-footer *ngIf='visualizeMode'>
-        Imports:
-        <ul>
-          <li *ngFor='let element of imports | keyvalue'>{{element.key}} > {{element.value}}</li>
-        </ul>
-      </mat-card-footer>
-    </mat-card>
-    <!-- <div>
-      <mat-form-field class='padded'>
-        <mat-label>Upload file to use</mat-label>
-        <ngx-mat-file-input (change)='processFile($event)'></ngx-mat-file-input>
-      </mat-form-field>
-      <button mat-raised-button (click)="sendCode()">Visualize</button>
-    </div> -->
+  <mat-grid-tile id='codeTile'>
+    <code-input (mode)='toggleVisualization($event)' (visualizeClick)='sendCode($event)' (reportClick)='getReport($event)' [imports]='imports'></code-input>
   </mat-grid-tile>
-  <mat-grid-tile colspan='2' *ngIf='visualizeMode'>
-    <div id='container'></div>
-  </mat-grid-tile>
-  <mat-grid-tile colspan='2' *ngIf='!visualizeMode'>
-    asdfasdf
+  <mat-grid-tile colspan='2'>
+    <output-results [visualization]='graphData' [visualizeMode]='visualizeMode' [report]='report'></output-results>
   </mat-grid-tile>
 </mat-grid-list>
+<div class="overlay" *ngIf='loading'>
+  <div class="center">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

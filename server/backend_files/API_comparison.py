@@ -181,12 +181,16 @@ def run_files(data_1, data_2, type_):
         #print([curr_peak, (x, y)])
     #print('----------------------------------------------')
     #print(final_pair)
+    res = {
+        'pairs': []
+    }
     str_ = 'Similarity result: ' + '\n '
     #print('Similiarity result: ')
     if type_ == 'complex':
         for i in final_pair:
             str_ = str_ + 'Method: ' + str(list(data_1.keys())[i[1][0]]) +  ' ------ ' + \
                   str(list(data_2.keys())[i[1][1]]) + ' with similarity: ' + str(i[0]) + '\n '
+            res['pairs'].append((str(list(data_1.keys())[i[1][0]]), str(list(data_2.keys())[i[1][1]]), i[0]))
             #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ',
              #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
@@ -198,5 +202,6 @@ def run_files(data_1, data_2, type_):
         all_nodes += len(data_1[list(data_1.keys())[i]][0])
     score_ = sum(score_list)/all_nodes
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
+    res['overall'] = score_
     #print('Overall Similiarity Score: ', score_ )
-    return score_, str_
+    return res

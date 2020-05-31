@@ -13,10 +13,16 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatCardModule } from '@angular/material/card';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { CodeInputComponent } from './code-input/code-input.component';
+import { OutputResultsComponent } from './output-results/output-results.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CodeInputComponent,
+    OutputResultsComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +35,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatStepperModule,
     MatCardModule,
     MaterialFileInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

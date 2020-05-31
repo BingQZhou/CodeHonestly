@@ -22,7 +22,7 @@ def similarity():
         return json.dumps(sim.process(tree1, tree2))
     except Exception as e:
         logging.error(traceback.format_exc())
-        return json.dumps([[0, 0, 0, 0]])
+        return None
 
 if __name__ == '__main__':
     application.run(debug=True, host='0.0.0.0')

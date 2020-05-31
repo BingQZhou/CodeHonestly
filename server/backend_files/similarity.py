@@ -8,12 +8,10 @@ def Sort(sub_li):
 def process(processed1, processed2):
     threshold = 1
 
-    score_, str_ = run_files(processed1, processed2, 'complex')
-    fit_result = [['Code 1', 'Code 2', score_, str_]]
+    res = run_files(processed1, processed2, 'complex')
+    res['pairs'] = sorted(res['pairs'], key=lambda x: x[2])[:int(len(res['pairs']) * threshold)]
+    # fit_result = [['Code 1', 'Code 2', score_, str_]]
 
-    string_ = Sort(fit_result)
+    # string_ = Sort(fit_result)
 
-    first_k = int(len(string_) * threshold)
-    top_k = string_[:first_k]
-
-    return top_k
+    return res
