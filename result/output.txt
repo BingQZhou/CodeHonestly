@@ -1,26 +1,12 @@
-coursera_2.py
-coursera_1.py
-0.5653910795087266
-Similarity result: 
- Method: start_timer ------ start with similarity: 1.0
- Method: stop_timer ------ stop with similarity: 1.0
- Method: reset_timer ------ reset with similarity: 1.0
- Method: format ------ format with similarity: 0.9142857142857144
- Method: draw ------ draw with similarity: 0.43579831932773117
- Method: timer_handler ------ counter with similarity: 0.0
- Overall Similarity Score: 0.5653910795087266
- 
 coursera_3.py
 coursera_2.py
-0.4923076923076924
-Similarity result: 
- Method: format ------ format with similarity: 0.4923076923076924
- Overall Similarity Score: 0.4923076923076924
- 
+pairs
+overall
 coursera_3.py
 coursera_1.py
-0.4923076923076924
-Similarity result: 
- Method: format ------ format with similarity: 0.4923076923076924
- Overall Similarity Score: 0.4923076923076924
- 
+pairs
+overall
+coursera_2.py
+coursera_1.py
+pairs
+overall

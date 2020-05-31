@@ -1,4 +1,6 @@
-from pre_process import *
+import zss, numpy as np, logging, re, traceback
+from zss import Node, distance
+from helpers import *
 
 def insert_cost(a):
     return 1
@@ -76,14 +78,17 @@ def get_sim_matrix(data_1, data_2):
             for k in range(N1):
                 API_1 = info_1[1][k]
                 max_sim = -1
+                max_edit = 10000
                 for j in range(N2):
                     API_2 = info_2[1][j]
                     if API_1 == API_2:
-                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost).round(3)
+                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
+
                         max_len = max(info_1[0][k], info_2[0][j])
                         sim = (max_len - dist)/max_len
                         matrix[k, j] = sim
                         if sim > max_sim:
+                            max_edit = dist
                             max_sim = sim
                             #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
                     if max_sim == -1:
@@ -110,8 +115,6 @@ def get_score(matrix):
 
             temp_ = max(temp_)
             sum_ = sum_ + temp_
-        else:
-            sum_ = sum_ + 0
     return sum_ / mth_1_len
 
 def find_peak(mat):
@@ -125,13 +128,6 @@ def find_peak(mat):
                 y = j
                 max_ = mat[i][j]
     return max_, x, y
-
-def read_files(file):
-    with open(file) as f:
-        full_lines = ''
-        for i in f.readlines():
-            full_lines+=i
-    return json.loads(process(full_lines))
 
 
 def run_files(data_1, data_2, type_):
@@ -159,8 +155,11 @@ def run_files(data_1, data_2, type_):
 
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
-            score = get_score(temp[list(data_1.keys())[i]][j])
-            matrix[i][j] = score
+            try:
+                score = get_score(temp[list(data_1.keys())[i]][j])
+                matrix[i][j] = score
+            except IndexError:
+                matrix[i][j] = 0
 
     #print(matrix)
 
@@ -182,22 +181,28 @@ def run_files(data_1, data_2, type_):
         #print([curr_peak, (x, y)])
     #print('----------------------------------------------')
     #print(final_pair)
+    res = {
+        'pairs': []
+    }
     str_ = 'Similarity result: ' + '\n '
     #print('Similiarity result: ')
     if type_ == 'complex':
         for i in final_pair:
             str_ = str_ + 'Method: ' + str(list(data_1.keys())[i[1][0]]) +  ' ------ ' + \
                   str(list(data_2.keys())[i[1][1]]) + ' with similarity: ' + str(i[0]) + '\n '
+            res['pairs'].append((str(list(data_1.keys())[i[1][0]]), str(list(data_2.keys())[i[1][1]]), i[0]))
             #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ',
              #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
     all_nodes = 0
-    for i in range(len(final_pair)):
+    for i in range (len(final_pair)):
         #str_  = str_  + str(final_pair[i][0]) + str(len(data_1[list(data_1.keys())[i]][0])) + '\n '
         #print(final_pair[i][0], len(data_1[list(data_1.keys())[i]][0]))
         score_list = score_list + [final_pair[i][0]*(len(data_1[list(data_1.keys())[i]][0]))]
         all_nodes += len(data_1[list(data_1.keys())[i]][0])
     score_ = sum(score_list)/all_nodes
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
+    res['overall'] = score_
+    print(res)
     #print('Overall Similiarity Score: ', score_ )
-    return score_, str_
+    return res

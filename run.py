@@ -1,8 +1,14 @@
 import sys, json, shutil, subprocess, warnings
 
+import os
+
 sys.path.insert(0, './src')
 
 from API_comparison import *
+
+from preprocess import process
+
+from itertools import combinations
 warnings.filterwarnings("ignore")
 
 sys.path.insert(0, 'src')
@@ -21,6 +27,14 @@ def load_params(fp):
 def Sort(sub_li):
     return sorted(sub_li, key = lambda x: x[2], reverse=True)
 
+def read_files(file):
+    with open(file) as f:
+        full_lines = ''
+        for i in f.readlines():
+            full_lines+=i
+    file_result = json.loads(json.dumps(process(full_lines)))
+    return file_result
+
 def main(targets):
 
     if 'clean' in targets:
@@ -38,7 +52,7 @@ def main(targets):
         output_type = cfg['output_type'] # save or print out or [save and print out]
         output_mode = cfg['output_mode'] # simple or complex
 
-        all_py = [f for f in listdir(data_dir) if isfile(join(data_dir, f)) if f[-3:] == '.py']
+        all_py = [f for f in os.listdir(data_dir) if os.path.isfile(os.path.join(data_dir, f)) if f[-3:] == '.py']
         #print(all_py)
         #thre = 0.3
         fit_result = []
@@ -53,7 +67,7 @@ def main(targets):
             #print(list_)
             f1 = list_[i][0]
             f2 = list_[i][1]
-            score_ , str_ = run_files(read_files(join(data_dir,f1)), read_files(join(data_dir,f2)), output_mode)
+            score_ , str_ = run_files(read_files(os.path.join(data_dir,f1)), read_files(os.path.join(data_dir,f2)), output_mode)
             fit_result = fit_result + [[list_[i][0], list_[i][1], score_, str_]]
 
         string_ = Sort(fit_result)
@@ -70,7 +84,7 @@ def main(targets):
               os.mkdir(output_dir)
             except:
               pass
-            f = open(join(output_dir, output_file), "w")
+            f = open(os.path.join(output_dir, output_file), "w")
             for i in top_k:
                 for j in i:
                     f.write(str(j) + '\n')
