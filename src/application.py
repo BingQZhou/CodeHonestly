@@ -5,6 +5,7 @@ import preprocess as pp, json, similarity as sim, traceback, logging
 
 application = Flask(__name__)
 CORS(application)
+logging.basicConfig(level=logging.DEBUG)
 
 # @application.route('/')
 def index():

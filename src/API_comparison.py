@@ -1,6 +1,7 @@
 import zss, numpy as np, logging, re, traceback
 from zss import Node, distance
 from helpers import *
+from multiprocessing import Pool, Queue, Process
 
 def insert_cost(a):
     return 1
@@ -60,47 +61,61 @@ def get_node_type(node):
     return ntype
 
 def get_sim_matrix(data_1, data_2):
+    queue = Queue()
     methods_1 = data_1.keys()
     methods_2 = data_2.keys()
     ls = []
     temp = {}
     new = {}
-    for i in methods_1:
-        info_1 = data_1[i]
-        temp[i] = []
-        new[i] = {}
-        for n in methods_2:
-            info_2 = data_2[n]
-            N1 = len(info_1[0])
-            N2 = len(info_2[0])
-            matrix = np.full((N1, N2), np.nan)
-            new[i][n] = []
-            for k in range(N1):
-                API_1 = info_1[1][k]
-                max_sim = -1
-                max_edit = 10000
-                for j in range(N2):
-                    API_2 = info_2[1][j]
-                    if API_1 == API_2:
-                        dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
-
-                        max_len = max(info_1[0][k], info_2[0][j])
-                        sim = (max_len - dist)/max_len
-                        matrix[k, j] = sim
-                        if sim > max_sim:
-                            max_edit = dist
-                            max_sim = sim
-                            #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
-                    if max_sim == -1:
-                        detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
-                        matrix[k, N2-1] = 0
-                    else:
-                        detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
-                    new[i][n].append(detail)
-
-            temp[i].append(matrix)
-
+    processes = [Process(target=compare_methods, args=(methods_1, methods_2, data_1, data_2, i, queue)) for i in methods_1]
+    logging.info('# of processes: %i' % len(processes))
+    done = 0
+    for p in processes:
+        p.start()
+    for _ in processes:
+        item = queue.get()
+        done += 1
+        logging.info('done: %i' % done)
+        temp[item[0]] = item[1]
+        new[item[0]] = item[2]
+    for p in processes:
+        p.join()
     return temp, new
+
+def compare_methods(methods_1, methods_2, data_1, data_2, i, queue):
+    info_1 = data_1[i]
+    temp_i = []
+    new_i = {}
+    for n in methods_2:
+        info_2 = data_2[n]
+        N1 = len(info_1[0])
+        N2 = len(info_2[0])
+        matrix = np.full((N1, N2), np.nan)
+        new_i[n] = []
+        for k in range(N1):
+            API_1 = info_1[1][k]
+            max_sim = -1
+            max_edit = 10000
+            for j in range(N2):
+                API_2 = info_2[1][j]
+                if API_1 == API_2:
+                    dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
+
+                    max_len = max(info_1[0][k], info_2[0][j])
+                    sim = (max_len - dist)/max_len
+                    matrix[k, j] = sim
+                    if sim > max_sim:
+                        max_edit = dist
+                        max_sim = sim
+                        #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
+                if max_sim == -1:
+                    detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
+                    matrix[k, N2-1] = 0
+                else:
+                    detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
+                new_i[n].append(detail)
+        temp_i.append(matrix)
+    queue.put((i, temp_i, new_i))
 
 def get_score(matrix):
     if len(matrix) == 0 or len(matrix[0]) == 0:
@@ -203,6 +218,5 @@ def run_files(data_1, data_2, type_):
     score_ = sum(score_list)/all_nodes
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
     res['overall'] = score_
-    print(res)
     #print('Overall Similiarity Score: ', score_ )
     return res
