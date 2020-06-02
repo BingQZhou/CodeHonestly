@@ -397,6 +397,11 @@ def task_5(data_io, product_processed_data, word_0, word_1, word_2):
                                   seed = 5)
 
     model = word2Vec.fit(product_processed_data_output)
+    model = word2Vec.fit(product_processed_data_output)
+    model = word2Vec.fit(product_processed_data_output)
+    model = word2Vec.fit(product_processed_data_output)
+    model = word2Vec.fit(product_processed_data_output)
+    model = word2Vec.fit(product_processed_data_output)
 
 #     result = model.transform(title_df)
 #     result

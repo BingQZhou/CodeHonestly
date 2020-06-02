@@ -2,6 +2,7 @@ import zss, numpy as np, logging, re, traceback
 from zss import Node, distance
 from helpers import *
 from multiprocessing import Pool, Queue, Process
+import pandas as pd
 
 def insert_cost(a):
     return 1
@@ -48,13 +49,6 @@ def get_info(sub):
     N = len(s.split('\n'))
     return N, API, sub
 
-def get_label(sub):
-    s = "%d:%s" % (len(sub.children), sub.label)
-    s = '\n'.join([s]+[str(c) for c in sub.children])
-    s = s.split('\n')
-
-    s = [re.search('\d:(.+)', i).group(1) for i in s]
-    return s
 
 def get_node_type(node):
     ntype = re.search('(\w+)', node).group(1)
@@ -85,36 +79,30 @@ def get_sim_matrix(data_1, data_2):
 def compare_methods(methods_1, methods_2, data_1, data_2, i, queue):
     info_1 = data_1[i]
     temp_i = []
-    new_i = {}
+    new_i = []
     for n in methods_2:
         info_2 = data_2[n]
         N1 = len(info_1[0])
         N2 = len(info_2[0])
         matrix = np.full((N1, N2), np.nan)
-        new_i[n] = []
         for k in range(N1):
             API_1 = info_1[1][k]
-            max_sim = -1
             max_edit = 10000
             for j in range(N2):
                 API_2 = info_2[1][j]
                 if API_1 == API_2:
                     dist = zss.distance(info_1[2][k], info_2[2][j], Node.get_children, insert_cost, remove_cost, update_cost)
-
                     max_len = max(info_1[0][k], info_2[0][j])
                     sim = (max_len - dist)/max_len
                     matrix[k, j] = sim
-                    if sim > max_sim:
-                        max_edit = dist
-                        max_sim = sim
                         #print(i,n,info_1[1][k], info_2[1][j], sim, dist, info_1[0][k], info_2[0][j])
-                if max_sim == -1:
-                    detail = (info_1[0][k], 0, info_1[1][k], info_2[1][j])
-                    matrix[k, N2-1] = 0
-                else:
-                    detail = (max_len, max_sim, info_1[1][k], info_2[1][j])
-                new_i[n].append(detail)
-        temp_i.append(matrix)
+            
+        new_i.append(matrix)
+        df = df = pd.DataFrame(matrix, columns = info_2[1], index = info_1[1])
+        result_df = process_df(df, info_1[1], info_2[1])
+        temp_i.append(result_df.values)
+
+
     queue.put((i, temp_i, new_i))
 
 def get_score(matrix):
@@ -132,6 +120,35 @@ def get_score(matrix):
             sum_ = sum_ + temp_
     return sum_ / mth_1_len
 
+def find_peak_matrix(mini_df, df):
+    if any(mini_df.count(axis = 1).values >= 1):
+        col = mini_df.max(axis = 0).idxmax()
+        row = mini_df.max(axis = 1).idxmax()
+        df.loc[row, col] = mini_df.loc[row, col]
+        mini_df = mini_df.drop(columns = [col], index = [row])
+        return find_peak_matrix(mini_df, df)
+    else:
+        return df
+
+def process_df(df, APIs_1, APIs_2):
+    result_df = df.copy()
+    co = df.count(axis = 1)
+    APIs = co.keys()
+    count = co.tolist()
+    APIs = np.unique([APIs[i] for i in range(len(count)) if count[i] > 0])
+    for i in APIs:
+        left_upper = APIs_1.index(i)
+        left_lower = left_upper + APIs_1.count(i)
+        right_upper = APIs_2.index(i)
+        right_lower = right_upper + APIs_2.count(i)
+        mini_df = df.iloc[left_upper : left_lower, right_upper : right_lower].reset_index(drop = True)
+        mini_df.columns = range(APIs_2.count(i))
+        new_df = pd.DataFrame(np.full(mini_df.shape, np.nan))
+        update_df = find_peak_matrix(mini_df, new_df)
+        result_df.iloc[left_upper : left_lower, right_upper : right_lower] = np.array(update_df.values)
+    result_df.loc[result_df.isnull().all(axis = 1)] = 0
+    return result_df
+
 def find_peak(mat):
     x = 0
     y = 0
@@ -143,6 +160,7 @@ def find_peak(mat):
                 y = j
                 max_ = mat[i][j]
     return max_, x, y
+
 
 
 def run_files(data_1, data_2, type_):
