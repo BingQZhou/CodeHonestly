@@ -210,7 +210,7 @@ def run_files(data_1, data_2, type_):
              #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
     all_nodes = 0
-    for i in range (len(final_pair)):
+    for i in range(len(final_pair)):
         #str_  = str_  + str(final_pair[i][0]) + str(len(data_1[list(data_1.keys())[i]][0])) + '\n '
         #print(final_pair[i][0], len(data_1[list(data_1.keys())[i]][0]))
         score_list = score_list + [final_pair[i][0]*(len(data_1[list(data_1.keys())[i]][0]))]
