@@ -38,7 +38,7 @@ def process(processed):
 
             ret['detailed'][comb[0][0]][comb[1][0]] = sorted(res['pairs'], key=lambda x: x[2])[:int(len(res['pairs']) * threshold)]
 
-            ret['overview']['data'][file_to_rows_idx[comb[0][0]], file_to_columns_idx[comb[1][0]]] = res['overall']
+            ret['overview']['data'][file_to_rows_idx[comb[0][0]], file_to_columns_idx[comb[1][0]]] = res['overall'] if not np.isnan(res['overall']) else 0 
         except ZeroDivisionError:
             ret['errors'].append('%s - %s' % (comb[0][0], comb[1][0]))
         # res['pairs'] = sorted(res['pairs'], key=lambda x: x[2])[:int(len(res['pairs']) * threshold)]
