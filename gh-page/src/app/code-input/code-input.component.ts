@@ -37,7 +37,7 @@ b()
 c()
 sum(1, 2, 3)`, '']
 
-  visualizeMode: boolean = true
+  @Input() visualizeMode: boolean = true
 
   @Output() codeChange: EventEmitter<string[]> = new EventEmitter<string[]>()
   @Output() mode: EventEmitter<boolean> = new EventEmitter<boolean>()
