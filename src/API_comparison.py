@@ -218,5 +218,6 @@ def run_files(data_1, data_2, type_):
     score_ = sum(score_list)/all_nodes
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
     res['overall'] = score_
+    print(str_)
     #print('Overall Similiarity Score: ', score_ )
     return res
