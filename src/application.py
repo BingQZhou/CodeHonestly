@@ -18,9 +18,8 @@ def process():
 @application.route('/simreport', methods=['POST'])
 def similarity():
     try:
-        tree1 = pp.process(request.form.get('pysrc1'))
-        tree2 = pp.process(request.form.get('pysrc2'))
-        return json.dumps(sim.process(tree1, tree2))
+        trees = [(key, pp.process(request.form.get(key))) for key in request.form.keys() if key[:5] == 'pysrc' and key[5:].isdigit()]
+        return json.dumps(sim.process(trees))
     except Exception as e:
         logging.error(traceback.format_exc())
         return None
