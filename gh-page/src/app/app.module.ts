@@ -21,6 +21,7 @@ import { VisualizeRootComponent } from './visualize-root/visualize-root.componen
 import { SimilarityRootComponent } from './similarity-root/similarity-root.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetailedViewComponent } from './detailed-view/detailed-view.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DetailedViewComponent } from './detailed-view/detailed-view.component';
     OutputResultsComponent,
     VisualizeRootComponent,
     SimilarityRootComponent,
-    DetailedViewComponent
+    DetailedViewComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
