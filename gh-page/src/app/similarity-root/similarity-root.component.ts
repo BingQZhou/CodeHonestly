@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Result } from '../output-results/output-results.component';
 
 @Component({
@@ -10,7 +10,9 @@ export class SimilarityRootComponent {
   report: Result = {}
   visualizeMode: boolean = false
   loading: boolean = false
-  
+  file1: string = null
+  file2: string = null
+
   async getReport(code: string[]): Promise<void> {
     this.loading = true
     let req = await fetch('http://demo.codehonestly.com:5000/simreport', {
@@ -21,5 +23,9 @@ export class SimilarityRootComponent {
     })
     this.loading = false
     this.report = await req.json()
+  }
+
+  sendToDetailedView(files: string[]): void {
+    [this.file1, this.file2] = files
   }
 }

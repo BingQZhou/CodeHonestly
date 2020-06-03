@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core'
+import { Component, Input, AfterViewInit, EventEmitter, Output } from '@angular/core'
 
 declare var vtree: any
 
@@ -33,6 +33,8 @@ export class OutputResultsComponent implements AfterViewInit {
     this._columns = Array(value).fill(0).map((_, i) => String(i))
   }
 
+  @Output() onSimilarityClick: EventEmitter<string[]> = new EventEmitter<string[]>()
+
   vt: any
   displayedColumns = ['name']
 
@@ -45,6 +47,14 @@ export class OutputResultsComponent implements AfterViewInit {
       document.querySelector('svg').style.boxShadow = 'none'
       this.vt.height = document.querySelector('svg').clientHeight
       this.vt.width = document.querySelector('svg').clientWidth
+    }
+  }
+
+  cellClick(i: number, j: number): void {
+    if (i !== j) {
+      this.onSimilarityClick.emit([this._report.overview.rows[i], this._report.overview.columns[j]])
+    } else {
+      this.onSimilarityClick.emit(['', ''])
     }
   }
 }

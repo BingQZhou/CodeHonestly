@@ -8,8 +8,8 @@ import { Result } from '../output-results/output-results.component';
 })
 export class DetailedViewComponent implements OnInit {
   _columns: string[] = ['pysrc1', 'pysrc2']
-  file1: string = ''
-  file2: string = ''
+  @Input() file1: string = ''
+  @Input() file2: string = ''
   displayedColumns: string[] = ['func1', 'func2', 'sim']
 
   @Input() report: Result = {}

@@ -22,6 +22,7 @@ import { SimilarityRootComponent } from './similarity-root/similarity-root.compo
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetailedViewComponent } from './detailed-view/detailed-view.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { HomepageComponent } from './homepage/homepage.component';
     MatSelectModule,
     MatTableModule,
     MatProgressSpinnerModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
