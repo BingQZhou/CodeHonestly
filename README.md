@@ -1,4 +1,4 @@
-->CodeHonestly<-
+<center>CodeHonestly</center>
 ### Utilize AST graphs to detect code plagiarism
 
 ![](logo.png)
