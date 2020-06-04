@@ -5,7 +5,7 @@
 
 `python run.py test-projec` to run the project
 
-Note: please make sure there are at least two Python files in data folder, not any subfolder.
+Note: please make sure there are at least two Python files in data folder, not any subfolder. Also, the current version is not suitable for terminal, please try on our website. We will update later.
 
 Website: https://www.codehonestly.com/
 
