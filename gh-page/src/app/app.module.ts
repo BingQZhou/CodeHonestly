@@ -23,6 +23,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetailedViewComponent } from './detailed-view/detailed-view.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
-    MatSortModule
+    MatSortModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

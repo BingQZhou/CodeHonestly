@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit, EventEmitter, Output } from '@angular/core'
+import { Component, Input, AfterViewInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core'
 
 declare var vtree: any
 
@@ -11,6 +11,8 @@ export class OutputResultsComponent implements AfterViewInit {
   _visualizeMode: boolean = true
   _report: Result = {}
   _columns: string[] = ['input1', 'input2']
+
+  @ViewChild('svg') svgElement: ElementRef
 
   @Input() set visualizeMode(value: boolean) {
     this._visualizeMode = value

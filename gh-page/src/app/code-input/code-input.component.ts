@@ -1,5 +1,7 @@
 import { Component, ViewChildren, QueryList, ElementRef, Output, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { examples } from 'src/assets/examples';
 
 @Component({
   selector: 'code-input',
@@ -9,46 +11,7 @@ import { MatSelectChange } from '@angular/material/select';
 export class CodeInputComponent implements AfterViewInit {
   @ViewChildren('codeView') codeViews: QueryList<ElementRef>
 
-  examples = [
-`import pandas as pd
-import matplotlib.pyplot as plt
-
-def clean_data(data):
-    data = data.drop_duplicates()
-    data.fillna(0,inplace=True)
-    data = data[data['catagory']=='other'].copy()
-    return data
-
-def explore_data(data):
-    print(data.info())
-    print("average price: "+str(data['price'].mean()))
-    print("max price: "+str(data['price'].max()))
-    print("quantity: "+str(len(data)))
-
-def train_model(data):
-    data = clean_data(data)
-    x = data.drop(['price'])
-    y = data['price']
-    model = LogisticRegression()
-    model.train_n_folds(x,y,fold = 5)
-    return model
-
-def validate_model(test_data,model):
-    test_data = clean_data(test_data)
-    x = test_data.drop(['price'])
-    y = test_data['price']
-    predicted = model.predict(x)
-    accuracy = (predicted == y).mean()
-    return accuracy
-`,
-`import pandas as pd
-def find_mean_by_group(df, col):
-  return df.groupby(col).mean()
-
-test = pd.DataFrame([[1, 2, 3], [4, 5, 6], [7, 8, 9]], columns=['a', 'b', 'c'])
-find_mean_by_group(test, a)
-`
-  ]
+  examples = examples
 
   code: string[] = [`# demonstration of preprocessing and normalizing imports
 import pandas as pd
@@ -73,6 +36,8 @@ sum(1, 2, 3)`, '']
   @Output() reportClick: EventEmitter<string[]> = new EventEmitter<string[]>()
 
   @Input() imports: Map<string, string> = new Map<string, string>()
+
+  constructor(private _snackBar: MatSnackBar) {}
 
   ngAfterViewInit() {
     this.visualizeClick.emit(this.code[0])
@@ -106,6 +71,13 @@ sum(1, 2, 3)`, '']
       this.codeViews.toArray()[index].nativeElement.value = fr.result
       this.code[index] = fr.result as string
     }
-    fr.readAsText(e.target.files[0])
+    if (e.target.files[0].name.slice(-3) === '.py') {
+      fr.readAsText(e.target.files[0])
+    } else {
+      this._snackBar.open('Please upload .py files', 'Dismiss', {
+        duration: 5000
+      })
+      e.target.value = ''
+    }
   }
 }

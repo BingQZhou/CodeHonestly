@@ -1,5 +1,5 @@
 <div id='container' *ngIf='_visualizeMode'></div>
-<div id='overall' *ngIf='_report.hasOwnProperty("errors")'>
+<div class='overall' *ngIf='_report.hasOwnProperty("errors")'>
   <h1>Overall File Similarities</h1>
   <mat-table [dataSource]='_report["overview"]["data"]' *ngIf='_report.hasOwnProperty("overview") && !_visualizeMode && !_report.errors.length' class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="name" sticky>

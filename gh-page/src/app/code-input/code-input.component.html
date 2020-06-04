@@ -4,8 +4,8 @@
     <mat-form-field style='min-width: 500px;'>
       <mat-label>Choose example for input 1</mat-label>
       <mat-select (selectionChange)='handleExample($event)'>
-        <mat-option *ngFor="let example of examples; index as i" [value]="example">
-          Example {{i + 1}}
+        <mat-option *ngFor="let example of examples; index as i" [value]="example.code">
+          {{example.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -17,8 +17,8 @@
       <mat-form-field style='min-width: 500px;'>
         <mat-label>Choose example for input 2</mat-label>
         <mat-select (selectionChange)='handleExample($event, 1)'>
-          <mat-option *ngFor="let example of examples; index as i" [value]="example">
-            Example {{i + 1}}
+          <mat-option *ngFor="let example of examples; index as i" [value]="example.code">
+            {{example.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -33,11 +33,11 @@
       <mat-form-field class='padded'>
         <mat-label *ngIf='visualizeMode'>Upload file to use</mat-label>
         <mat-label *ngIf='!visualizeMode'>Input 1 file</mat-label>
-        <ngx-mat-file-input (change)='processFile($event)'></ngx-mat-file-input>
+        <ngx-mat-file-input (change)='processFile($event)' accept='.py'></ngx-mat-file-input>
       </mat-form-field>
       <mat-form-field class='padded' *ngIf='!visualizeMode'>
         <mat-label *ngIf='!visualizeMode'>Input 2 file</mat-label>
-        <ngx-mat-file-input (change)='processFile($event, 1)'></ngx-mat-file-input>
+        <ngx-mat-file-input (change)='processFile($event, 1)' accept='.py'></ngx-mat-file-input>
       </mat-form-field>
     </div>
     <div>
