@@ -29,15 +29,18 @@ def get_smaller(ls):
         length = []
         APIs = []
         subs = []
+        d = []
         for i in ls[l]:
             try:
                 N, API, sub = get_info(i)
-                length.append(N)
-                APIs.append(API)
-                subs.append(sub)
-
+                detail = (N, API, sub)
+                d.append(detail)
             except:
                 continue
+        d.sort(key = lambda tup: tup[1])
+        length = [x[0] for x in d]
+        APIs = [x[1] for x in d]
+        subs = [x[2] for x in d]
         result = [length, APIs, subs]
         data[l] = result
     return data
