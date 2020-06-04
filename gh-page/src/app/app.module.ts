@@ -17,12 +17,23 @@ import { MatTableModule } from '@angular/material/table';
 import { CodeInputComponent } from './code-input/code-input.component';
 import { OutputResultsComponent } from './output-results/output-results.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { VisualizeRootComponent } from './visualize-root/visualize-root.component';
+import { SimilarityRootComponent } from './similarity-root/similarity-root.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { DetailedViewComponent } from './detailed-view/detailed-view.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
     AppComponent,
     CodeInputComponent,
-    OutputResultsComponent
+    OutputResultsComponent,
+    VisualizeRootComponent,
+    SimilarityRootComponent,
+    DetailedViewComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +48,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MaterialFileInputModule,
     MatSelectModule,
     MatTableModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatToolbarModule,
+    MatSortModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

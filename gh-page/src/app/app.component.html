@@ -1,4 +1,4 @@
-<mat-grid-list cols='3' class='full-height' rowHeight='100%'>
+<!-- <mat-grid-list cols='3' class='full-height' rowHeight='100%'>
   <mat-grid-tile id='codeTile'>
     <code-input (mode)='toggleVisualization($event)' (visualizeClick)='sendCode($event)' (reportClick)='getReport($event)' [imports]='imports'></code-input>
   </mat-grid-tile>
@@ -10,4 +10,11 @@
   <div class="center">
     <mat-spinner></mat-spinner>
   </div>
-</div>
+</div> -->
+<mat-toolbar color="primary">
+  <span routerLink='/' routerLinkActive='active' class='link-like'>CodeHonestly</span>
+  <button mat-button routerLink="/visualize" routerLinkActive="active">Visualize</button>
+  <button mat-button routerLink="/similarity" routerLinkActive="active">Similarity</button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

@@ -41,7 +41,7 @@
 
       document.getElementById('visualize-button').addEventListener('click', () => {
         d3.json('ast2json').header('Content-Type', 'application/x-www-form-urlencoded')
-          .post(`pysrc=${encodeURIComponent(document.getElementById('python-src').value)}&normalize=${document.querySelector('#normalize').checked}&ctx=${document.querySelector('#ctx').checked}`, (error, data) => {
+          .post(`input=${encodeURIComponent(document.getElementById('python-src').value)}&normalize=${document.querySelector('#normalize').checked}&ctx=${document.querySelector('#ctx').checked}`, (error, data) => {
             if (error) {
               d3_msg.text(`${error.status}: ${error.statusText}`)
               return
