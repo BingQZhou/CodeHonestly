@@ -36,9 +36,9 @@ def process(processed):
                 file_to_columns_idx[comb[1][0]] = len(ret['overview']['columns'])
                 ret['overview']['columns'].append(comb[1][0])
 
-            ret['detailed'][comb[0][0]][comb[1][0]] = sorted(res['pairs'], key=lambda x: x[2])[:int(len(res['pairs']) * threshold)]
+            ret['detailed'][comb[0][0]][comb[1][0]] = sorted(res['pairs'], key=lambda x: x[2], reverse=True)[:int(len(res['pairs']) * threshold)]
 
-            ret['overview']['data'][file_to_rows_idx[comb[0][0]], file_to_columns_idx[comb[1][0]]] = res['overall'] if not np.isnan(res['overall']) else 0 
+            ret['overview']['data'][file_to_rows_idx[comb[0][0]], file_to_columns_idx[comb[1][0]]] = res['overall'] if not np.isnan(res['overall']) else 0
         except ZeroDivisionError:
             ret['errors'].append('%s - %s' % (comb[0][0], comb[1][0]))
         # res['pairs'] = sorted(res['pairs'], key=lambda x: x[2])[:int(len(res['pairs']) * threshold)]
@@ -47,6 +47,6 @@ def process(processed):
     # string_ = Sort(fit_result)
     ret['overview']['data'] = ret['overview']['data'].tolist()
     for key, val in file_to_rows_idx.items():
-        ret['overview']['data'][val][file_to_columns_idx[key]] = '-'
+        ret['overview']['data'][val][file_to_columns_idx[key]] = ''
         ret['overview']['data'][val] = [key] + ret['overview']['data'][val]
     return ret

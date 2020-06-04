@@ -19,7 +19,7 @@ export class SimilarityRootComponent {
       method: 'POST', headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `pysrc1=${encodeURIComponent(code[0])}&pysrc2=${encodeURIComponent(code[1])}`
+      body: `input1=${encodeURIComponent(code[0])}&input2=${encodeURIComponent(code[1])}`
     })
     this.loading = false
     this.report = await req.json()

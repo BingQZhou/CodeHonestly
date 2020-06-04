@@ -7,7 +7,7 @@ import { Result } from '../output-results/output-results.component';
   styleUrls: ['./detailed-view.component.sass']
 })
 export class DetailedViewComponent implements OnInit {
-  _columns: string[] = ['pysrc1', 'pysrc2']
+  _columns: string[] = ['input1', 'input2']
   @Input() file1: string = ''
   @Input() file2: string = ''
   displayedColumns: string[] = ['func1', 'func2', 'sim']

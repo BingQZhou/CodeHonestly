@@ -16,7 +16,7 @@ export class VisualizeRootComponent {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `pysrc=${encodeURIComponent(code)}&normalize=true&ctx=false`
+      body: `input=${encodeURIComponent(code)}&normalize=true&ctx=false`
     })
     let response: PreprocessingServerResponse = await request.json()
 

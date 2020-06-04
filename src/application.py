@@ -13,16 +13,23 @@ def index():
 
 @application.route('/ast2json', methods=['POST'])
 def process():
-    return json.dumps(pp.process(request.form.get('pysrc'), request.form.get('ctx') == 'true', request.form.get('normalize') == 'true'))
+    return json.dumps(pp.process(request.form.get('input'), request.form.get('ctx') == 'true', request.form.get('normalize') == 'true'))
 
 @application.route('/simreport', methods=['POST'])
 def similarity():
     try:
-        trees = [(key, pp.process(request.form.get(key))) for key in request.form.keys() if key[:5] == 'pysrc' and key[5:].isdigit()]
+        trees = [(key, pp.process(request.form.get(key))) for key in request.form.keys() if key[:5] == 'input' and key[5:].isdigit()]
         return json.dumps(sim.process(trees))
+    except SyntaxError as e:
+        logging.error(traceback.format_exc())
+        return json.dumps({
+            'errors': ['Supplied code contains syntax errors']
+        })
     except Exception as e:
         logging.error(traceback.format_exc())
-        return None
+        return json.dumps({
+            'errors': [str(e)]
+        })
 
 if __name__ == '__main__':
-    application.run(debug=True, host='0.0.0.0')
+    application.run(host='0.0.0.0')

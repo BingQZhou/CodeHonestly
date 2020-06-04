@@ -12,7 +12,7 @@ def index():
 
 @application.route('/ast2json', methods=['POST'])
 def process():
-    node = ast.parse(request.form.get('pysrc'))
+    node = ast.parse(request.form.get('input'))
     jsoned = ast2json(node)
     as_obj = json.loads(jsoned)
     # manipulation

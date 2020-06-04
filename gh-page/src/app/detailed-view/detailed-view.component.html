@@ -1,4 +1,5 @@
-<ng-container *ngIf='report.hasOwnProperty("detailed") && report.errors.length === 0'>
+<ng-container id='detailed' *ngIf='report.hasOwnProperty("detailed") && report.errors.length === 0'>
+  <h1>Detailed Similarity Comparison</h1>
   <mat-form-field class='padded'>
     <mat-label>Select File 1</mat-label>
     <mat-select [(value)]='file1'>
@@ -15,7 +16,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-table [dataSource]='report["detailed"][file1][file2]' *ngIf='file1 !== file2 && file1 !== "" && file2 !== ""' class="mat-elevation-z8">
+  <mat-table [dataSource]='report["detailed"][file1][file2]' *ngIf='file1 !== file2 && file1 !== "" && file2 !== "" && file1 !== undefined && file2 !== undefined && file1 !== null && file2 != null' class="mat-elevation-z8">
     <ng-container matColumnDef="func1">
       <mat-header-cell *matHeaderCellDef>File 1 Function</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element[0]}}</mat-cell>

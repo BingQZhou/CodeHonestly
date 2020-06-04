@@ -10,7 +10,7 @@ declare var vtree: any
 export class OutputResultsComponent implements AfterViewInit {
   _visualizeMode: boolean = true
   _report: Result = {}
-  _columns: string[] = ['pysrc1', 'pysrc2']
+  _columns: string[] = ['input1', 'input2']
 
   @Input() set visualizeMode(value: boolean) {
     this._visualizeMode = value
