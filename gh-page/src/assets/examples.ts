@@ -46,7 +46,7 @@ def draw(canvas):
   canvas.draw_text(format(count), [125, 125], 25, "White")
   canvas.draw_text(result, [225,50], 25, "Red")
 `,
-    name: 'Coursera 1'
+    name: 'Coursera 1 (Course A)'
   }, {
     code: `# STOPWATCH: Time as you've never seen it before
 # (I used to work in PR)
@@ -101,7 +101,7 @@ def draw(canvas):
   canvas.draw_text(t,[130,150],24,"Yellow","monospace")
   canvas.draw_text(str(success)+"/"+str(counter),[260,30],20,"Red","monospace")
 `,
-    name: 'Coursera 2'
+    name: 'Coursera 2 (Course A)'
   }, {
     code: `import os
 import pyspark.sql.functions as F
@@ -575,7 +575,7 @@ def task_8(data_io, train_data, test_data):
     return res
     # -------------------------------------------------------------------------
 `,
-    name: 'DSC-A-1'
+    name: 'DSC-A-1 (Course B)'
   }, {
     code: `import os
 import pyspark.sql.functions as F
@@ -1121,7 +1121,7 @@ def task_8(data_io, train_data, test_data):
     return res
     # -------------------------------------------------------------------------
 `,
-    name: 'DSC-A-2'
+    name: 'DSC-A-2 (Course B)'
   }, {
     code: `import os
 import pyspark.sql.functions as F
@@ -1596,7 +1596,7 @@ def task_8(data_io, train_data, test_data):
     return res
     # -------------------------------------------------------------------------
 `,
-    name: 'DSC-A-3'
+    name: 'DSC-A-3 (Course B)'
   }, {
     code: `import pandas as pd
 import matplotlib.pyplot as plt
@@ -1631,7 +1631,7 @@ def validate_model(test_data,model):
         print('success')
     return accuracy
 `,
-    name: 'DSC-B-1'
+    name: 'DSC-B-1 (Course C)'
   }, {
     code: `import pandas as pd
 import matplotlib.pyplot as plt
@@ -1669,7 +1669,7 @@ def validate(test_data,model):
         print('success')
     return accuracy
 `,
-    name: 'DSC-B-2'
+    name: 'DSC-B-2 (Course C)'
   }
 ]
 
