@@ -167,16 +167,17 @@ def find_peak(mat):
 
 
 def run_files(data_1, data_2, type_):
+
     body_2 = get_body(data_2)
     result_2 = create_func_dict(body_2)
 
     body_1 = get_body(data_1)
     result_1 = create_func_dict(body_1)
-    #print(result_1)
+
 
     data_1 = get_smaller(result_1)
     data_2 = get_smaller(result_2)
-    #print(data_1)
+
 
     temp, new = get_sim_matrix(data_1, data_2)
 
@@ -187,8 +188,6 @@ def run_files(data_1, data_2, type_):
         matrix = np.full((len(methods_1), len(methods_2)), np.nan)
     else:
         matrix = np.full((len(methods_2), len(methods_1)), np.nan)
-
-
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             try:
@@ -197,10 +196,6 @@ def run_files(data_1, data_2, type_):
             except IndexError:
                 matrix[i][j] = 0
 
-    #print(matrix)
-
-
-    # TODO: consider different len of method - do it when building the matrix
     final_pair = []
     for method_A in range(len(matrix)):
         #print(matrix)
@@ -213,30 +208,27 @@ def run_files(data_1, data_2, type_):
                     matrix[i][j] = -1000
             matrix[i][y] = -1000
         final_pair = final_pair + [[curr_peak, (x, y)]]
-        #print('-----***********************************-----')
-        #print([curr_peak, (x, y)])
-    #print('----------------------------------------------')
-    #print(final_pair)
     res = {
         'pairs': []
     }
     str_ = 'Similarity result: ' + '\n '
-    #print('Similiarity result: ')
     if type_ == 'complex':
         for i in final_pair:
             str_ = str_ + 'Method: ' + str(list(data_1.keys())[i[1][0]]) +  ' ------ ' + \
                   str(list(data_2.keys())[i[1][1]]) + ' with similarity: ' + str(i[0]) + '\n '
             res['pairs'].append((str(list(data_1.keys())[i[1][0]]), str(list(data_2.keys())[i[1][1]]), i[0]))
-            #print('Mythod: ',list(data_1.keys())[i[1][0]], ' ------ ',
-             #     list(data_2.keys())[i[1][1]], ' with similiarity: ', i[0])
     score_list = []
-    all_nodes = 0
+    all_APIs = 0
+    all_API_file_2 = 0
     for i in range(len(final_pair)):
-        #str_  = str_  + str(final_pair[i][0]) + str(len(data_1[list(data_1.keys())[i]][0])) + '\n '
-        #print(final_pair[i][0], len(data_1[list(data_1.keys())[i]][0]))
         score_list = score_list + [final_pair[i][0]*(len(data_1[list(data_1.keys())[i]][0]))]
-        all_nodes += len(data_1[list(data_1.keys())[i]][0])
-    score_ = sum(score_list)/all_nodes
+        all_APIs += len(data_1[list(data_1.keys())[i]][0])
+        all_API_file_2 += len(data_2[list(data_2.keys())[i]][0])
+    if all_APIs == 0 or all_API_file_2 == 0:
+        score_ = -1
+        print('no API found')
+    else:
+        score_ = sum(score_list)/all_APIs
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
     res['overall'] = score_
     print(str_)
