@@ -33,6 +33,7 @@ def convert_body(body,parent_node = None, root_node = None):
                             new_parent = convert_body(body[j],parent_node = new_parent,root_node = root_node)
                         else:
                             call_call_func_name = ''
+                            #if j == ''
                             if j == 'func':
                                 call_call_func_name =' '+body[j]['id']
                             node_content = j+' '+body[j]['_PyType']+call_call_func_name
@@ -65,13 +66,21 @@ def seperate_dict(dic):
                     dic[i+str(count)] = j
             del dic[i]
     return dic
-def create_func_dict(body):
-    func_dict={}
+def create_func_dict(body,func_dict ={}):
+
     for i in body:
         func_nodes_list = []
         func_name = ''
         body_i = get_body(i)
-        if i['_PyType'] == 'FunctionDef':
+        # Channge start
+        #print(' ')
+        #print(i)
+        if i['_PyType'] == 'ClassDef':
+            i = i['body']
+            i  = create_func_dict(i,func_dict)
+            body_i = get_body(i)
+        # Channge end
+        elif i['_PyType'] == 'FunctionDef':
             func_name = i['name']
             if body_i and isinstance(body_i,list):
                 for j in body_i:
@@ -79,5 +88,8 @@ def create_func_dict(body):
         else:
             #print('Not all codes are wrapped into functions, please do so.')
             continue
-        func_dict[func_name] = func_nodes_list
+        if func_name:
+            func_dict.update({func_name:func_nodes_list})
+        #func_dict[func_name] = func_nodes_list
+
     return func_dict
