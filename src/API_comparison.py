@@ -180,17 +180,17 @@ def run_files(data_1, data_2, type_):
 
 
     temp, new = get_sim_matrix(data_1, data_2)
-
     methods_1 = data_1.keys()
     methods_2 = data_2.keys()
 
     if min(len(methods_1), len(methods_2)) == len(methods_1):
         matrix = np.full((len(methods_1), len(methods_2)), np.nan)
+        swap = 0
     else:
         matrix = np.full((len(methods_2), len(methods_1)), np.nan)
-        temp = data_1
-        data_1 = data_2
-        data_2 = temp
+        swap = 1
+        data_1, data_2 = data_2, data_1
+
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             try:
@@ -199,7 +199,10 @@ def run_files(data_1, data_2, type_):
                 if sum(size_1)==0 or sum(size_2) == 0:
                     score = -1
                 else:
-                    score = get_score(temp[list(data_1.keys())[i]][j])
+                    if swap == 1: 
+                        score = get_score(temp[list(data_2.keys())[i]][j])
+                    else:
+                        score = get_score(temp[list(data_1.keys())[i]][j])
                 matrix[i][j] = score
             except IndexError:
                 matrix[i][j] = 0
