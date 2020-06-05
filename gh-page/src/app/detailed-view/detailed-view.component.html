@@ -31,7 +31,7 @@
     </ng-container>
     <ng-container matColumnDef="sim">
       <mat-header-cell *matHeaderCellDef>Similarity</mat-header-cell>
-      <mat-cell *matCellDef="let element" (click)='similarityClick.emit(element.slice(0, 2))' style='cursor: pointer'>{{element[2] | number:'1.0-2'}}</mat-cell>
+      <mat-cell *matCellDef="let element" (click)='similarityClick.emit(element.slice(0, 2))' style='cursor: pointer'>{{element[2] !== -1 ? (element[2] | number:'1.0-2') : 'No APIs'}}</mat-cell>
       <!-- <mat-footer-cell *matFooterCellDef>{{report.overall | number:'1.0-2'}}</mat-footer-cell> -->
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

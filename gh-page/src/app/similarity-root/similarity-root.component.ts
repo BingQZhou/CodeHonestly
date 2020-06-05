@@ -41,7 +41,7 @@ export class SimilarityRootComponent {
       let splitted: string[] = this._code[i].split('\n')
       let hasStart: boolean = false
       for (let line of splitted) {
-        if (line.startsWith(`def ${fn}`)) {
+        if (line.trimLeft().startsWith(`def ${fn}`)) {
           currentFn.push(line)
           hasStart = true
           continue
