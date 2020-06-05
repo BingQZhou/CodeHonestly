@@ -188,12 +188,15 @@ def run_files(data_1, data_2, type_):
         matrix = np.full((len(methods_1), len(methods_2)), np.nan)
     else:
         matrix = np.full((len(methods_2), len(methods_1)), np.nan)
+        temp = data_1
+        data_1 = data_2
+        data_2 = temp
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             try:
                 size_1 = data_1[list(data_1.keys())[i]][0]
                 size_2 = data_2[list(data_2.keys())[j]][0]
-                if sum(size_1) or sum(size_2) == 0:
+                if sum(size_1)==0 or sum(size_2) == 0:
                     score = -1
                 else:
                     score = get_score(temp[list(data_1.keys())[i]][j])
