@@ -236,7 +236,8 @@ def run_files(data_1, data_2, type_):
         score_ = -1
         #print('no API found')
     else:
-        score_ = sum(score_list)/all_APIs
+        valid_score = [s for s in score_list if s > -1]
+        score_ = sum(valid_score)/all_APIs
     str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n ' 
     if '-1.0' in str_:
         str_ = str_ + '-1 means no API found'
