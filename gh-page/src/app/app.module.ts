@@ -28,6 +28,7 @@ import { CheckerRootComponent } from './checker-root/checker-root.component';
 import { MultifileUploadComponent } from './multifile-upload/multifile-upload.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PasswordDialogComponent } from './password-dialog/password-dialog.component';
+import { CompareDialogComponent } from './compare-dialog/compare-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { PasswordDialogComponent } from './password-dialog/password-dialog.compo
     HomepageComponent,
     CheckerRootComponent,
     MultifileUploadComponent,
-    PasswordDialogComponent
+    PasswordDialogComponent,
+    CompareDialogComponent
   ],
   imports: [
     BrowserModule,

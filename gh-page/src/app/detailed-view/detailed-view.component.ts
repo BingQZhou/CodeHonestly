@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Result } from '../output-results/output-results.component';
 
 @Component({
@@ -17,6 +17,8 @@ export class DetailedViewComponent implements OnInit {
     this._columns = Array(value).fill(0).map((_, i) => String(i))
     this.file1 = this.file2 = ''
   }
+
+  @Output() similarityClick: EventEmitter<Array<string>> = new EventEmitter<Array<string>>()
 
   constructor() { }
 

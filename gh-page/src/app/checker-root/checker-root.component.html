@@ -3,7 +3,7 @@
     <multifile-upload (filesRead)='sendCode($event)'></multifile-upload>
   </mat-grid-tile>
   <mat-grid-tile colspan='2'>
-    <output-results [visualizeMode]='false' [report]='report' (onSimilarityClick)='sendToDetailedView($event)' [numberOfFiles]='numberOfFiles'></output-results>
+    <output-results [visualizeMode]='false' [report]='report' (similarityClick)='sendToDetailedView($event)' [numberOfFiles]='numberOfFiles'></output-results>
   </mat-grid-tile>
   <mat-grid-tile colspan='2' rowspan='2'>
     <detailed-view [report]='report' [file1]='file1' [file2]='file2' class='full-size'></detailed-view>

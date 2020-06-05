@@ -43,6 +43,10 @@ sum(1, 2, 3)`, '']
     this.visualizeClick.emit(this.code[0])
   }
 
+  saveCodeAndSendEvent() {
+    this.reportClick.emit(this.code)
+  }
+
   processTab(e: KeyboardEvent, index=0): boolean {
     let asArray: Array<ElementRef> = this.codeViews.toArray()
     if (e.key === 'Tab') {

@@ -35,7 +35,7 @@ export class OutputResultsComponent implements AfterViewInit {
     this._columns = Array(value).fill(0).map((_, i) => 'input' + String(i + 1))
   }
 
-  @Output() onSimilarityClick: EventEmitter<string[]> = new EventEmitter<string[]>()
+  @Output() similarityClick: EventEmitter<string[]> = new EventEmitter<string[]>()
 
   vt: any
   displayedColumns = ['name']
@@ -54,9 +54,9 @@ export class OutputResultsComponent implements AfterViewInit {
 
   cellClick(i: number, j: number): void {
     if (i !== j) {
-      this.onSimilarityClick.emit([this._report.overview.rows[i], this._report.overview.columns[j]])
+      this.similarityClick.emit([this._report.overview.rows[i], this._report.overview.columns[j]])
     } else {
-      this.onSimilarityClick.emit(['', ''])
+      this.similarityClick.emit(['', ''])
     }
   }
 }
