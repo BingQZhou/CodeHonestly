@@ -3,7 +3,7 @@
   <div>
     <mat-form-field class='padded'>
       <mat-label>Select File 1</mat-label>
-      <mat-select [(value)]='file1'>
+      <mat-select [(value)]='file1' (selectionChange)='emitFileChange()'>
         <mat-option *ngFor="let file of _columns" [value]="file">
           {{file}}
         </mat-option>
@@ -11,7 +11,7 @@
     </mat-form-field>
     <mat-form-field class='padded'>
       <mat-label>Select File 2</mat-label>
-      <mat-select [(value)]='file2'>
+      <mat-select [(value)]='file2' (selectionChange)='emitFileChange()'>
         <mat-option *ngFor="let file of _columns" [value]="file">
           {{file}}
         </mat-option>

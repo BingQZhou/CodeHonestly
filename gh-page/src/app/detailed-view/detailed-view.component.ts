@@ -20,8 +20,14 @@ export class DetailedViewComponent implements OnInit {
 
   @Output() similarityClick: EventEmitter<Array<string>> = new EventEmitter<Array<string>>()
 
+  @Output() fileChange: EventEmitter<Array<string>> = new EventEmitter<Array<string>>()
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  emitFileChange(): void {
+    this.fileChange.emit([this.file1, this.file2])
   }
 }

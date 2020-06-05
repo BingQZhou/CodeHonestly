@@ -50,6 +50,7 @@ export class SimilarityRootComponent {
         if (hasStart) {
           if (line.trimLeft() === line && line.trim() !== '' && line.trim().charAt(0) !== '#') {
             fns.push(currentFn.join('\n'))
+            currentFn = []
             break
           } else {
             if (line.trim().charAt(0) !== '#') {

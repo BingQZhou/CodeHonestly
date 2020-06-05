@@ -6,7 +6,7 @@
     <output-results [visualizeMode]='visualizeMode' [report]='report' (similarityClick)='sendToDetailedView($event)'></output-results>
   </mat-grid-tile>
   <mat-grid-tile colspan='2' rowspan='2'>
-    <detailed-view [report]='report' [file1]='file1' [file2]='file2' class='full-size' (similarityClick)='showModal($event)'></detailed-view>
+    <detailed-view [report]='report' [file1]='file1' [file2]='file2' class='full-size' (similarityClick)='showModal($event)' (fileChange)='sendToDetailedView($event)'></detailed-view>
   </mat-grid-tile>
 </mat-grid-list>
 <div class="overlay" *ngIf='loading'>
