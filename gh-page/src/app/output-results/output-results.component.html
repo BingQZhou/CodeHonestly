@@ -8,7 +8,7 @@
     </ng-container>
     <ng-container *ngFor="let col of _columns; let i = index" [matColumnDef]='col'>
       <mat-header-cell *matHeaderCellDef mat-sort-header>{{col}}</mat-header-cell>
-      <mat-cell *matCellDef="let element; let j = index" (click)='cellClick(j, i)' class="pointer">{{element[i + 1] | number:'1.0-2'}}</mat-cell>
+      <mat-cell *matCellDef="let element; let j = index" (click)='cellClick(j, i)' class="pointer">{{element[i + 1] !== -1 ? (element[i + 1] | number:'1.0-2') : 'No APIs'}}</mat-cell>
     </ng-container>
     <!-- <ng-container matColumnDef="func1">
       <mat-header-cell *matHeaderCellDef>File 1 Function</mat-header-cell>
