@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { APIs } from '../api/api';
 
 @Component({
   selector: 'app-visualize-root',
@@ -11,20 +12,6 @@ export class VisualizeRootComponent {
   graphData: object = {}
 
   async sendCode(code: string): Promise<void> {
-    let request: Response = await fetch('http://demo.codehonestly.com:5000/ast2json', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `input=${encodeURIComponent(code)}&normalize=true&ctx=false`
-    })
-    let response: PreprocessingServerResponse = await request.json()
-
-    this.graphData = response['graph']
+    this.graphData = (await APIs.getVisualization(code)).graph
   }
-}
-
-export interface PreprocessingServerResponse {
-  imports: object
-  graph: object
 }

@@ -20,4 +20,20 @@ export class APIs {
 
     return response
   }
+
+  static async getVisualization(code: string): Promise<PreprocessingServerResponse> {
+    let request: Response = await fetch('http://demo.codehonestly.com:5000/ast2json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `input=${encodeURIComponent(code)}&normalize=true&ctx=false`
+    })
+    return await request.json()
+  }
+}
+
+export interface PreprocessingServerResponse {
+  imports: object
+  graph: object
 }
