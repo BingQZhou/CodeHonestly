@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Result } from '../output-results/output-results.component';
+import { APIs } from '../api/api';
 
 @Component({
   selector: 'app-similarity-root',
@@ -15,14 +16,8 @@ export class SimilarityRootComponent {
 
   async getReport(code: string[]): Promise<void> {
     this.loading = true
-    let req = await fetch('http://demo.codehonestly.com:5000/simreport', {
-      method: 'POST', headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `input1=${encodeURIComponent(code[0])}&input2=${encodeURIComponent(code[1])}`
-    })
+    this.report = await APIs.getReport(code)
     this.loading = false
-    this.report = await req.json()
   }
 
   sendToDetailedView(files: string[]): void {

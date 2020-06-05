@@ -24,6 +24,10 @@ import { DetailedViewComponent } from './detailed-view/detailed-view.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CheckerRootComponent } from './checker-root/checker-root.component';
+import { MultifileUploadComponent } from './multifile-upload/multifile-upload.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PasswordDialogComponent } from './password-dialog/password-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     VisualizeRootComponent,
     SimilarityRootComponent,
     DetailedViewComponent,
-    HomepageComponent
+    HomepageComponent,
+    CheckerRootComponent,
+    MultifileUploadComponent,
+    PasswordDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +58,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatProgressSpinnerModule,
     MatToolbarModule,
     MatSortModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

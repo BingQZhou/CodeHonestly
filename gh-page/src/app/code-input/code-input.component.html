@@ -43,6 +43,7 @@
     <div>
       <button mat-raised-button (click)="visualizeClick.emit(code[0])" *ngIf='visualizeMode'>Visualize</button>
       <button mat-raised-button (click)="reportClick.emit(code)" *ngIf='!visualizeMode'>Get Report</button>
+      <button mat-raised-button routerLink="/check" routerLinkActive="active" *ngIf='!visualizeMode'>Multi-file upload</button>
       <!-- <button mat-raised-button (click)="toggleVisualization()">Toggle Mode</button> -->
     </div>
   </mat-card-actions>

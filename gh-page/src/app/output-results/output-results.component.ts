@@ -32,7 +32,7 @@ export class OutputResultsComponent implements AfterViewInit {
   }
 
   @Input() set numberOfFiles(value: number) {
-    this._columns = Array(value).fill(0).map((_, i) => String(i))
+    this._columns = Array(value).fill(0).map((_, i) => 'input' + String(i + 1))
   }
 
   @Output() onSimilarityClick: EventEmitter<string[]> = new EventEmitter<string[]>()

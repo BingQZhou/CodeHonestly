@@ -1,21 +1,23 @@
-<ng-container class='detailed' *ngIf='report.hasOwnProperty("detailed") && report.errors.length === 0'>
+<div class='detailed' *ngIf='report.hasOwnProperty("detailed") && report.errors.length === 0'>
   <h1>Detailed Similarity Comparison</h1>
-  <mat-form-field class='padded'>
-    <mat-label>Select File 1</mat-label>
-    <mat-select [(value)]='file1'>
-      <mat-option *ngFor="let file of _columns" [value]="file">
-        {{file}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class='padded'>
-    <mat-label>Select File 2</mat-label>
-    <mat-select [(value)]='file2'>
-      <mat-option *ngFor="let file of _columns" [value]="file">
-        {{file}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div>
+    <mat-form-field class='padded'>
+      <mat-label>Select File 1</mat-label>
+      <mat-select [(value)]='file1'>
+        <mat-option *ngFor="let file of _columns" [value]="file">
+          {{file}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class='padded'>
+      <mat-label>Select File 2</mat-label>
+      <mat-select [(value)]='file2'>
+        <mat-option *ngFor="let file of _columns" [value]="file">
+          {{file}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <mat-table [dataSource]='report["detailed"][file1][file2]' *ngIf='file1 !== file2 && file1 !== "" && file2 !== "" && file1 !== undefined && file2 !== undefined && file1 !== null && file2 != null' class="mat-elevation-z8">
     <ng-container matColumnDef="func1">
       <mat-header-cell *matHeaderCellDef>File 1 Function</mat-header-cell>
@@ -36,4 +38,4 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     <!-- <mat-footer-row *matFooterRowDef='displayedColumns'></mat-footer-row> -->
   </mat-table>
-</ng-container>
+</div>
