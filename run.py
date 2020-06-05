@@ -79,6 +79,8 @@ def main(targets):
                 #print(p)
                 str_ = str_+' Method: ' + str(p[0]) + ' ------ ' + str(p[1]) + ' with similarity: ' + str(p[2])  + '\n '
             str_ = str_ + 'Overall Similarity Score: ' + str(overall) + '\n '
+            if '-1.0' in str_:
+                str_ = str_ + '-1 means no API found'
             fit_result = fit_result + [[list_[i][0], list_[i][1], str_]]
 
         string_ = fit_result
