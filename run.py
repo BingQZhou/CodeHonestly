@@ -68,10 +68,22 @@ def main(targets):
             #print(list_)
             f1 = list_[i][0]
             f2 = list_[i][1]
-            score_ , str_ = run_files(read_files(os.path.join(data_dir,f1)), read_files(os.path.join(data_dir,f2)), output_mode)
-            fit_result = fit_result + [[list_[i][0], list_[i][1], score_, str_]]
+            res = run_files(read_files(os.path.join(data_dir,f1)), read_files(os.path.join(data_dir,f2)), output_mode)
+            #print(res)
+            pairs = res['pairs']
+            overall = res['overall']
+            str_ = ''
+            #print('---------------------')
+            #print(pairs)
+            for p in pairs:
+                #print(p)
+                str_ = str_+' Method: ' + str(p[0]) + ' ------ ' + str(p[1]) + ' with similarity: ' + str(p[2])  + '\n '
+            str_ = str_ + 'Overall Similarity Score: ' + str(overall) + '\n '
+            if '-1.0' in str_:
+                str_ = str_ + '-1 means no API found'
+            fit_result = fit_result + [[list_[i][0], list_[i][1], str_]]
 
-        string_ = Sort(fit_result)
+        string_ = fit_result
 
         top_k = []
         first_k = len(string_)*thre

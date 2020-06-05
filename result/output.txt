@@ -1,8 +1,20 @@
-Sample_3 4.38.04 PM.py
+sample1.py
+file_with_class.py
+pairs
+overall
+sample1.py
 Sample_1 4.38.05 PM.py
 pairs
 overall
-Sample_3 4.38.04 PM.py
+sample1.py
+Sample_2 4.38.05 PM.py
+pairs
+overall
+file_with_class.py
+Sample_1 4.38.05 PM.py
+pairs
+overall
+file_with_class.py
 Sample_2 4.38.05 PM.py
 pairs
 overall
