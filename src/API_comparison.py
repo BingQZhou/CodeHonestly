@@ -191,7 +191,12 @@ def run_files(data_1, data_2, type_):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             try:
-                score = get_score(temp[list(data_1.keys())[i]][j])
+                size_1 = data_1[list(data_1.keys())[i]][0]
+                size_2 = data_2[list(data_2.keys())[j]][0]
+                if sum(size_1) or sum(size_2) == 0:
+                    score = -1
+                else:
+                    score = get_score(temp[list(data_1.keys())[i]][j])
                 matrix[i][j] = score
             except IndexError:
                 matrix[i][j] = 0
@@ -226,11 +231,13 @@ def run_files(data_1, data_2, type_):
         all_API_file_2 += len(data_2[list(data_2.keys())[i]][0])
     if all_APIs == 0 or all_API_file_2 == 0:
         score_ = -1
-        print('no API found')
+        #print('no API found')
     else:
         score_ = sum(score_list)/all_APIs
-    str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n '
+    str_ = str_ + 'Overall Similarity Score: ' + str(score_) + '\n ' 
+    if '-1.0' in str_:
+        str_ = str_ + '-1 means no API found'
     res['overall'] = score_
-    print(str_)
+    #print(str_)
     #print('Overall Similiarity Score: ', score_ )
     return res
